@@ -1,0 +1,85 @@
+$scale-var: 1600 / 2560;
+
+.histroy {
+	padding: 16px;
+	align-items: center;
+	padding-top: 18px * $scale-var !important;
+	padding-bottom: 18px * $scale-var !important;
+	margin: 0 !important;
+	width: 100%;
+	height: 100%;
+	.history-table {
+		width: 100%;
+		margin-top: 5px;
+		.table-header {
+			color: white;
+			background-color: #3C3C97;
+		}
+		tbody {
+			margin-top: 10px;
+		}
+		.history-table tr th , .text-blue{
+			color: #5C52C6;
+
+		}
+		tr {
+			border-top: none;
+		}
+		th {
+			border-top: none;
+			border-bottom: none !important;
+			padding-top: 5px;
+			padding-bottom: 5px;
+			font-size: 12px;
+		}
+		td{
+			color: white;
+			white-space: nowrap;
+			vertical-align: middle;
+			padding: 4px 15px;
+			font-size: 12px;
+			border-bottom: none !important;
+			border-top: none !important;
+		}
+		.odd{
+			background: linear-gradient(90deg, #3C3C97 4.22%, #363075 100%);
+		}
+
+		thead tr {
+			background: linear-gradient(90deg, #3C3C97 4.22%, #363075 100%);
+		}
+
+		tr:nth-child(odd) {
+			background-color: transparent !important;
+		}
+		tr:nth-child(even) {
+			background: linear-gradient(90deg, #3C3C97 4.22%, #363075 100%);
+		}
+		.wager {
+			display: flex;
+			vertical-align: middle;
+			align-items: center;
+			img {
+				width: 20px;
+				padding: 0;
+				margin-left: 10px;
+			}
+		}
+		.mult {
+			color: #78FF15;
+		}
+		.payout {
+			color: #78FF15;
+			display: flex;
+			vertical-align: middle;
+			align-items: center;
+			img {
+				width: 20px;
+				padding: 0;
+				margin-left: 10px;
+			}
+		}
+	}
+	
+}
+

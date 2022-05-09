@@ -1,0 +1,203 @@
+$scale-var: 1600 / 2560;
+
+.bet-type {
+	align-items: center;
+	padding-top: 18px * $scale-var !important;
+	padding-left: 5% !important;
+	padding-right: 5% !important;
+	padding-bottom: 18px * $scale-var !important;
+	.title {
+		color: #5C52C6;
+		font-family: Nurom;
+		font-weight: bold;
+		font-size: 20px * $scale-var;
+		margin-bottom: 22px * $scale-var;
+		text-align: center;
+	}
+	.manual-auto-toggle {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		border: none;
+		.select-button {
+			width: 50% !important;
+			text-align: center;
+		}
+	}
+
+	.nav-tabs {
+		.nav-item {
+			width: 50%;
+			height: 47px * $scale-var;
+			border: none;
+			.nav-link {
+				height: 100%;
+				width: 100%;
+				background-color: #322C76 !important;
+				border: none;
+				border-radius: 0;
+				font-family: Nurom;
+				font-weight: 23px * $scale-var;
+				color: white !important;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			.active {
+				background-color: #F001F4 !important;
+			}
+		}
+		
+	}
+	.tab-content {
+		width: 100%;
+		.tab-pane {
+			margin-top: 24px * $scale-var;
+			width: 100%;
+		}
+	}
+	.multi {
+		display: flex;
+	}
+	.bet-detail {
+		width: 100%;
+		position: relative;
+		.title {
+			color: white;
+			font-family: Poppins-Regular;
+			font-size: 12px * $scale-var;
+			height: 18px;
+			text-align: left;
+			font-weight: normal;
+			position: absolute;
+			left: 22px * $scale-var;
+			top: 5px;
+		}
+		.main-description {
+			color: white;
+			font-family: Nurom;
+			font-weight: bold;
+			font-size: 21px * $scale-var;
+			position: absolute;
+			left: 22px * $scale-var;
+			top: 28px * $scale-var;
+		}
+		.sub-detail-content {
+			max-width: 50%;
+			flex-wrap: wrap;
+			position: absolute;
+			right: 20px;
+			transform: translateY(-50%);
+			top: 50%;
+			display: flex;
+			justify-content: right;
+			.detail {
+				margin-left: 5px;
+				font-family: Poppins-Regular;
+				font-size: 17px * $scale-var;
+				color: white;
+			}
+		}
+	}
+	.bet-amount {
+		
+		background-color: #3C3C97;
+		width: 100%;
+		height: 66px * $scale-var;
+	}
+	.auto-cashout {
+		margin-top: 15px * $scale-var;
+		background-color: #3C3C97;
+		width: 100%;
+		color: white;
+		height: 66px * $scale-var;
+	}
+	.play-button {
+		margin-top: 15px * $scale-var;
+		background-color: #F843EA;
+		width: 100%;
+		color: white;
+		height: 66px * $scale-var;
+		text-align: center;
+		position: relative;
+		white-space: nowrap;
+		span {
+			text-align: center;
+			font-family: Nurom;
+			font-size: 22px * $scale-var;
+			font-weight: bold;
+			transform: translate(-50%, -50%);
+			top: 50%;
+			left: 50%;
+			position: absolute;
+		}
+	}
+	.bet-info-detail {
+		margin-top: 15px * $scale-var;
+		background-color: #3C3C97;
+		width: 100%;
+		color: white;
+		height: 66px * $scale-var;
+		position: relative;
+	}
+	.total-bet {
+		margin-top: 15px * $scale-var;
+		background-color: #3C3C97;
+		width: 100%;
+		color: white;
+		height: 66px * $scale-var;
+	}
+	.my-recent-wins {
+		margin-top: 15px * $scale-var;
+		.title {
+			color: white;
+			font-family: Nurom;
+			font-size: 20px * $scale-var;
+			font-weight: bold;
+			text-align: center;
+			background-color: #3C3C97;
+			height: 42px * $scale-var;
+			position: relative;
+			margin: 0;
+			span {
+				position: absolute;
+				transform: translate(-50%, -50%);
+				top: 50%;
+				left: 50%;
+				white-space: nowrap;
+			}
+		}
+		.table {
+			width: 100%;
+			margin-bottom: 0 !important;
+			th {
+				font-family: Poppins-SemiBold;
+				font-weight: semi-bold;
+				font-size: 17px * $scale-var;
+				height: 50px * $scale-var;
+				padding-left: 15px;
+				border: none;
+			}
+			tr {
+				border: none;
+				color: white;
+				height: 42px * $scale-var;
+				
+			}
+			td {
+				padding: 6px;
+				padding-left: 15px;
+				border: none;
+				font-family: Poppins-Regular;
+				font-size: 17px * $scale-var;
+			}
+			tr:nth-child(even) {
+				background-color: #3C3C97;
+			}
+			td:nth-child(even) {
+				color: #78FF15;
+			}
+		}
+	}
+}
+
