@@ -30,6 +30,9 @@ const TakStaking = (props) => {
     let addr1 = CONTRACTS[CONTRACTS_TYPE.TAKTOKENSTAKE][4]?.address;
 
     const [approveAmount, setAmountValue] = useState(0);
+    const [claimAmount, setClaimAmount] = useState(0);
+    const [amountStake, setAmountStake] = useState(0);
+    const [lockduration, setLockDuration] = useState(0);
 
 
     useEffect(() => {
@@ -59,8 +62,6 @@ const TakStaking = (props) => {
 
     // }
 
-    const [amountStake, setAmountStake] = useState(0);
-    const [lockduration, setLockDuration] = useState(0);
 
 
 
@@ -121,6 +122,7 @@ const TakStaking = (props) => {
         if (account && chainId && library) {
             web3 = new Web3(library.provider);
             let contract0 = new web3.eth.Contract(metadata0, addr0);
+            let contract1 = new web3.eth.Contract(metadata1, addr1);
             console.log(contract0);
 
             try
@@ -128,6 +130,9 @@ const TakStaking = (props) => {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
                 let allow_result = await contract0.methods.approve(addr1, 9999999).send({from: account});
                 setAmountValue(allow_result);
+
+                let amount_reward = await  contract0.methods.getAmountClaimable().call();
+                setClaimAmount(amount_reward);
             }
             catch(err)
             {
@@ -255,12 +260,12 @@ const TakStaking = (props) => {
                                         Lock in period (Days)
                                     </div>
                                     <div className="info">
-                                        <div className="item" onClick={() => clickLockDuration(0)}>0</div>
-                                        <div className="item" onClick={() => clickLockDuration(1)}>7</div>
-                                        <div className="item" onClick={() => clickLockDuration(2)}>30</div>
-                                        <div className="item" onClick={() => clickLockDuration(3)}>60</div>
-                                        <div className="item" onClick={() => clickLockDuration(4)}>90</div>
-                                        <div className="item" onClick={() => clickLockDuration(52)}>120</div>
+                                        <div className={`item ${lockduration == 0 ? 'active' : ''}`} onClick={() => clickLockDuration(0)}>0</div>
+                                        <div className={`item ${lockduration == 1 ? 'active' : ''}`} onClick={() => clickLockDuration(1)}>1</div>
+                                        <div className={`item ${lockduration == 2 ? 'active' : ''}`} onClick={() => clickLockDuration(2)}>2</div>
+                                        <div className={`item ${lockduration == 3 ? 'active' : ''}`} onClick={() => clickLockDuration(3)}>3</div>
+                                        <div className={`item ${lockduration == 4 ? 'active' : ''}`} onClick={() => clickLockDuration(4)}>4</div>
+                                        <div className={`item ${lockduration == 52 ? 'active' : ''}`} onClick={() => clickLockDuration(52)}>52</div>
                                     </div>
                                 </div>
                                 <div className="stake-component ph-hide wnd-show">
@@ -270,7 +275,7 @@ const TakStaking = (props) => {
                                     </div>
                                     <div className="info">
                                         <div></div>
-                                        <div><span className="pink-font">2'498</span> <span>$TAK</span></div>
+                                        <div><span className="pink-font">{claimAmount}</span> <span>$TAK</span></div>
                                     </div>
                                 </div>
                                 <div className="stake-component ph-show wnd-hide">
@@ -280,7 +285,7 @@ const TakStaking = (props) => {
                                         <img src={StarImg} alt="star" />
                                         Rewards
                                     </div>
-                                        <div><span className="pink-font">2'498</span> <span>$TAK</span></div>
+                                        <div><span className="pink-font">{claimAmount}</span> <span>$TAK</span></div>
                                     </div>
                                 </div>
                                 <div className="explain-component">
