@@ -141,8 +141,7 @@ const Sidebar = () => {
                   
               </button>
               <button className="purple border-0 wallet-address">
-                  0X488B...66JK6J
-              
+                  {12 % 2 == 0? "Wallet connect" : "0X488B...66JK6J" }
               </button>
           </div>
                     

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BankrollModal from '../../components/BanrollModal';
 import LeaderboardModal from '../../components/LeaderboardModal';
 import DepositModal from '../../components/DepositModal';
@@ -25,11 +25,22 @@ import WinningImg from '../../assets/images/winning-bonus.svg';
 import AvatarImg from '../../assets/images/user-img.png';
 import LogoHeader from './LogoHeader.js';
 
+import { useWeb3React } from '@web3-react/core';
+
 import { BsChevronDoubleDown } from 'react-icons/bs';
 import { FaAngleDoubleDown } from 'react-icons/fa';
 
 import { Row, Col } from 'react-bootstrap';
 import SelectNetworkModal from '../../components/SelectNetworkModal';
+
+//handsome
+import { injected } from "../../components/wallet/connectors";
+import Web3 from 'web3';
+
+
+
+let web3, _depoAddress;
+
 
 const Header = (props) => {
     const { children } = props;
@@ -41,7 +52,30 @@ const Header = (props) => {
     const [showSelectNetworkModal, setShowSelectNetworkModal] = useState(false);
     const [moneyType, setMoneyType] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
+
+    const { active, account, library, chainId, connector, activate, deactivate } = useWeb3React();
     
+    useEffect(() => {
+        (async () => {
+            if (account && chainId && library) {
+                web3 = new Web3(library.provider);
+            }
+        })();
+    }, [chainId, library, account])
+
+    function connect() {
+        activate(injected, async (error) => {
+            console.log(error);
+        });
+    }
+
+    async function disconnect() {
+        try {
+            deactivate();
+        } catch (ex) {
+            console.log(ex)
+        }
+    }
 
     return (
         <>
@@ -128,9 +162,16 @@ const Header = (props) => {
                             <img className="net-icon" src={cryptoImg} alt="Italian Trulli"></img>
                         </button>
                         <InfoBox className='relative' outSideClickFunc={setShowProfile}>
-                            <button className="purple border-0 wallet-address" onClick={() => setShowProfile(!showProfile)}>
-                                0X488B...66JK6J
-                            </button>
+                            {active ?
+                                    <button  className="purple border-0 wallet-address" secondary onClick={disconnect}> 
+                                        {account.slice(0,5) + '...' + account.slice(account.length -  4, account.length)} 
+                                    </button>
+                                :
+                                    <button  className="purple border-0 wallet-address" secondary onClick={connect}>Connect Wallet</button>
+                            }
+                            {/* <button className="purple border-0 wallet-address" onClick={() => setShowProfile(!showProfile)}>
+                                {12 % 2 == 0? "Wallet connect!" : "0X488B...66JK6J" }
+                            </button> */}
                             <div className={`absolute dropdown-profile ${showProfile ? 'show' : 'hidden'}`} aria-labelledby="dropdownMenuLink"  >
                                 <div className="drop-profile-section">
                                 <div className="profile-user">

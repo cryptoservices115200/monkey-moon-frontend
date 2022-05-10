@@ -1,5 +1,9 @@
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from "react-bootstrap";
 import ReactApexChart from "react-apexcharts";
+
+import { useWeb3React } from "@web3-react/core";
+import Web3 from 'web3';
 import LogoFooterComponent from "../../components/LogoFooterComponent";
 import AmountImg from '../../assets/images/amount.svg';
 import ClockImg from '../../assets/images/clock.svg';
@@ -7,8 +11,59 @@ import StarImg from '../../assets/images/star.svg';
 import BNBImg from '../../assets/images/bnb.png';
 import MonkeyImg from '../../assets/images/monkey.png';
 import './index.scss';
+import { EtherscanProvider } from '@ethersproject/providers';
+
+//handsome
+import { CONTRACTS, CONTRACTS_TYPE } from '../../utils/constants';
+import { injected } from "../../components/wallet/connectors";
+
+let web3 ;
 
 const TakStaking = (props) => {
+
+
+    const { active, account, library, chainId, connector, activate, deactivate } = useWeb3React();
+    let metadata0 = CONTRACTS[CONTRACTS_TYPE.TAKTOKEN][4]?.abi;
+    let addr0 = CONTRACTS[CONTRACTS_TYPE.TAKTOKEN][4]?.address;
+
+    let metadata1 = CONTRACTS[CONTRACTS_TYPE.TAKTOKENSTAKE][4]?.abi;
+    let addr1 = CONTRACTS[CONTRACTS_TYPE.TAKTOKENSTAKE][4]?.address;
+
+    const [approveAmount, setAmountValue] = useState(0);
+
+
+    useEffect(() => {
+        (async () => {
+            if (account && chainId && library) {
+                web3 = new Web3(library.provider);
+                let contract0 = new web3.eth.Contract(metadata0, addr0);
+                console.log(contract0);
+
+                try
+                {
+                    // let approve = await contract1.methods.approvedAddresses(account).call();
+                    let allow_result = await contract0.methods.allowance(account, addr1).call();
+                    console.log(allow_result);
+                    setAmountValue(allow_result);
+                }
+                catch(err)
+                {
+                    console.log(err);
+                }
+            }
+        })();
+    }, [chainId, library, account])
+
+
+    // if (account && chainId && library) {
+
+    // }
+
+    const [amountStake, setAmountStake] = useState(0);
+    const [lockduration, setLockDuration] = useState(0);
+
+
+
     const chartOptions = {
         chart: {
             type: 'area',
@@ -46,6 +101,122 @@ const TakStaking = (props) => {
         }
     ]
 
+    // const changeStakeAmount = () => {
+
+    // }
+
+    function connect() {
+        activate(injected, async (error) => {
+            console.log(error);
+        });
+    }
+
+
+    const changeStakeAmount = (e) => {
+        setAmountStake(e.target.value);
+    }
+
+
+    async function approve() {
+        if (account && chainId && library) {
+            web3 = new Web3(library.provider);
+            let contract0 = new web3.eth.Contract(metadata0, addr0);
+            console.log(contract0);
+
+            try
+            {
+                // let approve = await contract1.methods.approvedAddresses(account).call();
+                let allow_result = await contract0.methods.approve(addr1, 9999999).send({from: account});
+                setAmountValue(allow_result);
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+        }
+    }
+
+    async function clickStake() {
+        if(amountStake > 10000)
+        {
+            alert("Max amount over.");
+            return;
+        }
+
+        if (account && chainId && library) {
+
+
+            web3 = new Web3(library.provider);
+
+            let contract1 = new web3.eth.Contract(metadata1, addr1);
+            console.log(contract1);
+            console.log(account, lockduration);
+
+            try
+            {
+                // let approve = await contract1.methods.approvedAddresses(account).call();
+                let mint_result = await contract1.methods.stake(amountStake, lockduration).send({from: account});
+                
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+        }
+    }
+
+    async function clickUnStake() {
+        if (account && chainId && library) {
+
+
+            web3 = new Web3(library.provider);
+
+            let contract1 = new web3.eth.Contract(metadata1, addr1);
+            console.log(contract1);
+            console.log(account, lockduration);
+
+            try
+            {
+                // let approve = await contract1.methods.approvedAddresses(account).call();
+                let mint_result = await contract1.methods.unstake().send({from: account});
+                
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+        }
+    }
+
+    async function clickClaim() {
+        if (account && chainId && library) {
+
+
+            web3 = new Web3(library.provider);
+
+            let contract1 = new web3.eth.Contract(metadata1, addr1);
+            console.log(contract1);
+            console.log(account, lockduration);
+
+            try
+            {
+                // let approve = await contract1.methods.approvedAddresses(account).call();
+                let mint_result = await contract1.methods.claim().send({from: account});
+                
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+        }
+    }
+
+    const clickLockDuration = (day) => {
+        setLockDuration(day);
+    }
+
+    //amountStake
+
     return (
         <div className="staking-container">
             <div className="gradient-font staking-container-title">STAKING</div>
@@ -55,7 +226,7 @@ const TakStaking = (props) => {
                         <div className="staking-container-left">
                             <div className="staking-container-left-top">
                                 <div className="title">
-                                    Available Staked TAK Balance 10’000
+                                    Available Staked TAK Balance 10'000
                                 </div>
                                 <div className="stake-component ph-hide wnd-show">
                                     <div className="title">
@@ -63,8 +234,9 @@ const TakStaking = (props) => {
                                         Stake Amount
                                     </div>
                                     <div className="info">
-                                        <div className="">Amount</div>
-                                        <div className="">10'000 <span>max</span></div>
+                                        <input type='number' className='stake-amount' placeholder = 'Amount' onChange={changeStakeAmount} />
+                                        {/* <div className="">Amount</div> */}
+                                        <div className="">10000 <span>max</span></div>
                                     </div>
                                 </div>
                                 <div className="stake-component ph-show wnd-hide">
@@ -83,12 +255,12 @@ const TakStaking = (props) => {
                                         Lock in period (Days)
                                     </div>
                                     <div className="info">
-                                        <div className="item">0</div>
-                                        <div className="item">7</div>
-                                        <div className="item">30</div>
-                                        <div className="item">60</div>
-                                        <div className="item">90</div>
-                                        <div className="item">120</div>
+                                        <div className="item" onClick={() => clickLockDuration(0)}>0</div>
+                                        <div className="item" onClick={() => clickLockDuration(1)}>7</div>
+                                        <div className="item" onClick={() => clickLockDuration(2)}>30</div>
+                                        <div className="item" onClick={() => clickLockDuration(3)}>60</div>
+                                        <div className="item" onClick={() => clickLockDuration(4)}>90</div>
+                                        <div className="item" onClick={() => clickLockDuration(52)}>120</div>
                                     </div>
                                 </div>
                                 <div className="stake-component ph-hide wnd-show">
@@ -129,11 +301,25 @@ const TakStaking = (props) => {
                                 </div>
                             </div>
                             <div className="staking-container-left-bottom">
-                                <div className="button-group">
-                                    <div className="button">STAKE</div>
-                                    <div className="button">UNSTAKE</div>
-                                    <div className="button">CLAIM</div>
-                                </div>
+                                {!account && (
+                                    <div className="button-group">
+                                        <div className="button" onClick={connect}>Connect Wallet</div>
+                                    </div>
+                                )}
+
+                                {account && (approveAmount > 0) && (
+                                    <div className="button-group">
+                                        <div className="button" onClick={clickStake}>STAKE</div>
+                                        <div className="button" onClick={clickUnStake}>UNSTAKE</div>
+                                        <div className="button" onClick={clickClaim}>CLAIM</div>
+                                    </div> )
+                                }
+
+                                {account && (approveAmount == 0) && (
+                                    <div className="button-group">
+                                        <div className="button" onClick={approve}>approve</div>
+                                    </div> )
+                                }
                                 <div className="view-history white-btn">View History</div>
                             </div>
                         </div>

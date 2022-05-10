@@ -125,6 +125,19 @@
                     }
                 }
             }
+
+            .stake-amount {
+                background: transparent;
+                text-decoration: none;
+                color: wheat;
+                border: none;
+                -webkit-appearance: none;
+            }
+
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                appearance: none;
+            }
             
             .lock-component {
                 width: 100%;
