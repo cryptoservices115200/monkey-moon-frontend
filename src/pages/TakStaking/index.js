@@ -3,6 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import ReactApexChart from "react-apexcharts";
 
 import { useWeb3React } from "@web3-react/core";
+import { Hearts } from  'react-loader-spinner';
 import Web3 from 'web3';
 import LogoFooterComponent from "../../components/LogoFooterComponent";
 import AmountImg from '../../assets/images/amount.svg';
@@ -16,6 +17,8 @@ import { EtherscanProvider } from '@ethersproject/providers';
 //handsome
 import { CONTRACTS, CONTRACTS_TYPE } from '../../utils/constants';
 import { injected } from "../../components/wallet/connectors";
+
+
 
 let web3 ;
 
@@ -33,6 +36,7 @@ const TakStaking = (props) => {
     const [claimAmount, setClaimAmount] = useState(0);
     const [amountStake, setAmountStake] = useState(0);
     const [lockduration, setLockDuration] = useState(0);
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -107,9 +111,11 @@ const TakStaking = (props) => {
     // }
 
     function connect() {
+        setLoading(true);
         activate(injected, async (error) => {
             console.log(error);
         });
+        setLoading(false);
     }
 
 
@@ -120,6 +126,7 @@ const TakStaking = (props) => {
 
     async function approve() {
         if (account && chainId && library) {
+            setLoading(true);
             web3 = new Web3(library.provider);
             let contract0 = new web3.eth.Contract(metadata0, addr0);
             let contract1 = new web3.eth.Contract(metadata1, addr1);
@@ -138,6 +145,7 @@ const TakStaking = (props) => {
             {
                 console.log(err);
             }
+            setLoading(false);
         }
     }
 
@@ -150,7 +158,7 @@ const TakStaking = (props) => {
 
         if (account && chainId && library) {
 
-
+            setLoading(true);
             web3 = new Web3(library.provider);
 
             let contract1 = new web3.eth.Contract(metadata1, addr1);
@@ -167,13 +175,14 @@ const TakStaking = (props) => {
             {
                 console.log(err);
             }
+            setLoading(false);
         }
     }
 
     async function clickUnStake() {
         if (account && chainId && library) {
 
-
+            setLoading(true);
             web3 = new Web3(library.provider);
 
             let contract1 = new web3.eth.Contract(metadata1, addr1);
@@ -190,13 +199,14 @@ const TakStaking = (props) => {
             {
                 console.log(err);
             }
+            setLoading(false);
         }
     }
 
     async function clickClaim() {
         if (account && chainId && library) {
 
-
+            setLoading(true);
             web3 = new Web3(library.provider);
 
             let contract1 = new web3.eth.Contract(metadata1, addr1);
@@ -213,7 +223,8 @@ const TakStaking = (props) => {
             {
                 console.log(err);
             }
-        }
+            setLoading(false);
+        }   
     }
 
     const clickLockDuration = (day) => {
@@ -221,7 +232,17 @@ const TakStaking = (props) => {
     }
 
     //amountStake
-
+    if(loading)
+    {  
+        return (
+            <div className="staking-container">
+                <div style={{margin:'15% 40%'}}>
+                    <Hearts color="#F001F4" height={280} width={280}/>
+                </div>
+            </div>
+        )
+    }
+    else
     return (
         <div className="staking-container">
             <div className="gradient-font staking-container-title">STAKING</div>
