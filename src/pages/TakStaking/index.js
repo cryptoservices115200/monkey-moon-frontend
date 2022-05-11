@@ -136,6 +136,8 @@ const TakStaking = (props) => {
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
                 let allow_result = await contract0.methods.approve(addr1, 9999999).send({from: account});
+
+                allow_result = await contract0.methods.allowance(account, addr1).call();
                 setAmountValue(allow_result);
 
                 let amount_reward = await  contract0.methods.getAmountClaimable().call();
