@@ -56,6 +56,23 @@
             }
         }
 
+        &-middle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            &-btns {
+                display: flex;
+                .gradient-btn {
+                    
+                }
+                .first {
+                    margin-right: 16px;
+                }
+            }
+        }
+
         &-bottom {
             display: flex;
             justify-content: space-between;

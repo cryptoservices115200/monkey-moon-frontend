@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 
+
+
 import LogoFooterComponent from '../../components/LogoFooterComponent';
 import TimerComponent from '../../components/TimerComponent';
 import USDImg from '../../assets/images/usd.png';
@@ -46,6 +48,10 @@ const ComicBookearnings = (props) => {
           data: [30, 40, 45, 50, 49, 60, 70, 91]
         }
     ]
+
+
+
+
 
     return (
         <div className='earning-container'>

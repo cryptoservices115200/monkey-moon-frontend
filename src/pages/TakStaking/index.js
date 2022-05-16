@@ -26,8 +26,8 @@ const TakStaking = (props) => {
 
 
     const { active, account, library, chainId, connector, activate, deactivate } = useWeb3React();
-    let metadata0 = CONTRACTS[CONTRACTS_TYPE.TAKTOKEN][4]?.abi;
-    let addr0 = CONTRACTS[CONTRACTS_TYPE.TAKTOKEN][4]?.address;
+    let metadata0 = CONTRACTS[CONTRACTS_TYPE.NFTSTAKING][4]?.abi;
+    let addr0 = CONTRACTS[CONTRACTS_TYPE.NFTSTAKING][4]?.address;
 
     let metadata1 = CONTRACTS[CONTRACTS_TYPE.TAKTOKENSTAKE][4]?.abi;
     let addr1 = CONTRACTS[CONTRACTS_TYPE.TAKTOKENSTAKE][4]?.address;
@@ -37,7 +37,7 @@ const TakStaking = (props) => {
     const [amountStake, setAmountStake] = useState(0);
     const [lockduration, setLockDuration] = useState(0);
     const [loading, setLoading] = useState(false);
-
+    const [myBalance, setMyBalance] = useState(0);
 
     useEffect(() => {
         (async () => {
@@ -52,6 +52,9 @@ const TakStaking = (props) => {
                     let allow_result = await contract0.methods.allowance(account, addr1).call();
                     console.log(allow_result);
                     setAmountValue(allow_result);
+
+                    let balance = await contract0.methods.balanceOf(account).call();
+                    setMyBalance(balance / (10 ** 18));
                 }
                 catch(err)
                 {
@@ -102,7 +105,7 @@ const TakStaking = (props) => {
     const chartSeries = [
         {
           name: "series-1",
-          data: [30, 40, 45, 50, 49, 60, 70, 91]
+          data: [30, 10, 45, 50, 49, 60, 70, 91]
         }
     ]
 
@@ -254,7 +257,7 @@ const TakStaking = (props) => {
                         <div className="staking-container-left">
                             <div className="staking-container-left-top">
                                 <div className="title">
-                                    Available Staked TAK Balance 10'000
+                                    Available Staked TAK Balance {myBalance}
                                 </div>
                                 <div className="stake-component ph-hide wnd-show">
                                     <div className="title">

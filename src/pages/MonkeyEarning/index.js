@@ -4,12 +4,24 @@ import React, { useEffect, useState } from "react";
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 
+import Web3 from 'web3';
+import { useWeb3React } from "@web3-react/core";
+import { Hearts } from  'react-loader-spinner';
+import { CONTRACTS, CONTRACTS_TYPE } from '../../utils/constants';
+import { injected } from "../../components/wallet/connectors";
+
 import LogoFooterComponent from '../../components/LogoFooterComponent';
 import TimerComponent from '../../components/TimerComponent';
 import USDImg from '../../assets/images/usd.png';
 import './index.scss'
 
+// const keccak256 = require('keccak256');
+import keccak256 from 'keccak256';
+
+let web3 ;
+
 const MonkeyEarning = (props) => {
+
     const chartOptions = {
         chart: {
             type: 'area',
@@ -43,9 +55,105 @@ const MonkeyEarning = (props) => {
     const chartSeries = [
         {
           name: "series-1",
-          data: [30, 40, 45, 50, 49, 60, 70, 91]
+          data: [30, 40, 15, 20, 49, 60, 70, 31]
         }
     ]
+    
+    
+
+    
+    const { active, account, library, chainId, connector, activate, deactivate } = useWeb3React();
+    let metadata0 = CONTRACTS[CONTRACTS_TYPE.TAKTOKEN][4]?.abi;
+    let addr0 = CONTRACTS[CONTRACTS_TYPE.TAKTOKEN][4]?.address;
+
+    let metadata1 = CONTRACTS[CONTRACTS_TYPE.NFTMINT][4]?.abi;
+    let addr1 = CONTRACTS[CONTRACTS_TYPE.NFTMINT][4]?.address;
+
+    let metadata2 = CONTRACTS[CONTRACTS_TYPE.NFTSTAKING][4]?.abi;
+    let addr2 = CONTRACTS[CONTRACTS_TYPE.NFTSTAKING][4]?.address;
+
+    const [approveAmount, setAmountValue] = useState(0);
+    const [claimAmount, setClaimAmount] = useState(0);
+    const [amountStake, setAmountStake] = useState(0);
+    const [lockduration, setLockDuration] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [myBalance, setMyBalance] = useState(0);
+    const [myNFTData, setMyNFTData] = useState([]);
+    const [tokeIdList, setTokeIdList] = useState([]);
+
+    let base_uri = "https://ipfs.io/ipfs/QmT7a4eC1VnwPLK7wzF8jFZU5jDpuPi9KqQ8Kq386tpere/";
+
+    useEffect(() => {
+        (async () => {
+            if (account && chainId && library) {
+                web3 = new Web3(library.provider);
+                let nft_stake_contract = new web3.eth.Contract(metadata2, addr2);
+                console.log(nft_stake_contract);
+                try
+                {
+                    // let approve = await contract1.methods.approvedAddresses(account).call();
+                    let temp_array = [];
+                    let allow_result = await nft_stake_contract.methods.getNFTsByOwner(account, 0).call();   //0x16836190dd89aa4aea5f036e3270cb09f8e84790
+                    setTokeIdList(allow_result);
+                    for ( let i = 0; i < allow_result.length; i++)
+                    {
+                        let temp_url = base_uri + allow_result[i] + '.json';
+
+                        // fetch(temp_url).then(response => response.json()).then(data => temp_array.push(data));
+
+                        let temp_json = await fetch(temp_url);
+                        temp_json = await temp_json.json();
+                        temp_array.push(temp_json);
+                    }
+                    setMyNFTData(temp_array);
+                    console.log(temp_array);
+                    // setAmountValue(allow_result);
+
+                    // let balance = await nft_stake_contract.methods.balanceOf(account).call();
+                    // setMyBalance(balance / (10 ** 18));
+                }
+                catch(err)
+                {
+                    console.log(err);
+                }
+            }
+        })();
+    }, [chainId, library, account])
+
+
+    const stakeAction = async (token) => {
+
+        // alert(Math.floor(Date.now()/1000));
+        if (account && chainId && library) {
+            setLoading(true);
+            web3 = new Web3(library.provider);
+            let NFT_Staking_Contract = new web3.eth.Contract(metadata2, addr2);
+            let tokenId = Number(token.slice(1, token.length));
+            console.log(NFT_Staking_Contract);
+            let new_pm = {
+                'tokenId': tokenId,
+                'evolution': 0,
+                'timestaked':Math.floor(Date.now()/1000),
+                'C':500,
+                'proof':'handsome'
+            }
+
+            console.log([new_pm].length);
+            
+            try
+            {
+                let result = await NFT_Staking_Contract.methods.stake([new_pm]).send({from: account});
+                console.log(result);
+                console.log("done! Congratrations!");
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+            setLoading(false);
+        }
+    }
+
 
     return (
         <div className='earning-container'>
@@ -57,6 +165,19 @@ const MonkeyEarning = (props) => {
                         <div className='gradient-btn first'>STAKE ALL</div>
                         <div className='gradient-btn'>UNSTAKE ALL</div>
                     </div>
+                </div>
+                <div className='staking-container-top nft_container'>
+                    {myNFTData.map((data, index) => (
+                        <div
+                            key={index}
+                            className="staking-container-top-collection"
+                            // onClick={() => handleLogin(data.name)}
+                        >
+                            <div className="staking-container-top-collection-font" style = {{marginTop:'5px'}}>{data.name}</div>
+                            <img src={data.image} className = "staking-container-top-collection-image" alt={data.name} width = {'30px'} />
+                            <div className='gradient-btn staking-container-top-collection-btn' onClick={() => stakeAction(data.name)}>STAKE</div>
+                        </div>
+                    ))}
                 </div>
                 <div className='staking-container-bottom'>
                     <div className='staking-container-bottom-item'>
