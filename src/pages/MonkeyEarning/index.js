@@ -180,7 +180,7 @@ const MonkeyEarning = (props) => {
             console.log('proofproofproofproofproofproofproofproofproofproofproof')
             let new_pm = [{
                 'tokenId': tokenId,
-                'C':500,
+                'C':1,
                 'proof': proof,
                 'evolution': 0,
                 'timeStaked':Math.floor(Date.now()/1000)
