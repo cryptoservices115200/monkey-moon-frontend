@@ -13,15 +13,50 @@ import { injected } from "../../components/wallet/connectors";
 import LogoFooterComponent from '../../components/LogoFooterComponent';
 import TimerComponent from '../../components/TimerComponent';
 import USDImg from '../../assets/images/usd.png';
-import './index.scss'
+import './index.scss';
+
+
+const { MerkleTree } = require("merkletreejs");
+const keccak256 = require("keccak256");
+const { L1MonkeyData } = require("./evolution1_merkle_data");
+const { ethers } = require("ethers");
+
+
+
 
 // const keccak256 = require('keccak256');
-import keccak256 from 'keccak256';
 
 let web3 ;
 
 const MonkeyEarning = (props) => {
 
+
+    ///////////////////////////////
+        function encodeLeaf (tokenId, rarity) {
+            const encoded = ethers.utils.solidityKeccak256(
+                ["uint256", "uint256"],
+                [tokenId, rarity]
+            );
+            return encoded;
+        }
+        let leaves = [L1MonkeyData.map((x) => encodeLeaf(x.tokenId, x.rarity))];
+        let trees = leaves.map(
+            (evoLeafs) =>
+                new MerkleTree(evoLeafs, keccak256, {
+                    sortPairs: true,
+                })
+        );
+
+        console.log(trees);
+        let roots = trees.map((tree) => tree.getHexRoot().toString());
+        console.log("Roots: ", roots);
+
+
+        async function getProof(evolution, monkey) {
+            return trees[evolution].getHexProof(encodeLeaf(monkey.tokenId, monkey.rarity));
+        }
+
+    ///////////////////////////////
     const chartOptions = {
         chart: {
             type: 'area',
@@ -85,6 +120,9 @@ const MonkeyEarning = (props) => {
 
     useEffect(() => {
         (async () => {
+
+           
+        
             if (account && chainId && library) {
                 web3 = new Web3(library.provider);
                 let nft_stake_contract = new web3.eth.Contract(metadata2, addr2);
@@ -129,20 +167,32 @@ const MonkeyEarning = (props) => {
             web3 = new Web3(library.provider);
             let NFT_Staking_Contract = new web3.eth.Contract(metadata2, addr2);
             let tokenId = Number(token.slice(1, token.length));
-            console.log(NFT_Staking_Contract);
-            let new_pm = {
-                'tokenId': tokenId,
-                'evolution': 0,
-                'timestaked':Math.floor(Date.now()/1000),
-                'C':500,
-                'proof':'handsome'
-            }
+            let rarity;
 
-            console.log([new_pm].length);
+            L1MonkeyData.map((x) => x.tokenId == tokenId && (rarity = x.rarity));
+
+
+            console.log(tokenId, rarity);
+            console.log('tokenId, rarity');
+
+            let proof = await getProof(0, { tokenId: tokenId, rarity: rarity });
+            console.log(proof);
+            console.log('proofproofproofproofproofproofproofproofproofproofproof')
+            let new_pm = [{
+                'tokenId': tokenId,
+                'C':500,
+                'proof': proof,
+                'evolution': 0,
+                'timeStaked':Math.floor(Date.now()/1000)
+            }];
+
+        
+
+            console.log(new_pm);
             
             try
             {
-                let result = await NFT_Staking_Contract.methods.stake([new_pm]).send({from: account});
+                let result = await NFT_Staking_Contract.methods.stake(new_pm).send({from: account});
                 console.log(result);
                 console.log("done! Congratrations!");
             }
@@ -150,6 +200,32 @@ const MonkeyEarning = (props) => {
             {
                 console.log(err);
             }
+            setLoading(false);
+        }
+    }
+
+    const stakeAll = async () => 
+    {
+
+    }
+
+    const unStakeAll = async () => 
+    {
+        if (account && chainId && library) {
+            setLoading(true);
+            web3 = new Web3(library.provider);
+            let NFT_Staking_Contract = new web3.eth.Contract(metadata2, addr2);
+            try
+            {
+                let result = await NFT_Staking_Contract.methods.unstake().send({from: account});
+                console.log(result);
+                console.log("unstake done! Congratrations!");
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+
             setLoading(false);
         }
     }
@@ -162,8 +238,8 @@ const MonkeyEarning = (props) => {
                 <div className='staking-container-top'>
                     <div className='gradient-font container-title'>NFT STAKING OVERIVEW</div>
                     <div className='staking-container-top-btns'>
-                        <div className='gradient-btn first'>STAKE ALL</div>
-                        <div className='gradient-btn'>UNSTAKE ALL</div>
+                        {/* <div className='gradient-btn first' onClick = {stakeAll}>STAKE ALL</div> */}
+                        <div className='gradient-btn' onClick = {unStakeAll}>UNSTAKE ALL</div>
                     </div>
                 </div>
                 <div className='staking-container-top nft_container'>
