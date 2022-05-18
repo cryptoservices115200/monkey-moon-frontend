@@ -93,10 +93,10 @@ const MonkeyEarning = (props) => {
           data: [30, 40, 15, 20, 49, 60, 70, 31]
         }
     ]
-    
-    
 
-    
+
+
+
     const { active, account, library, chainId, connector, activate, deactivate } = useWeb3React();
     let metadata0 = CONTRACTS[CONTRACTS_TYPE.TAKTOKEN][4]?.abi;
     let addr0 = CONTRACTS[CONTRACTS_TYPE.TAKTOKEN][4]?.address;
@@ -121,8 +121,8 @@ const MonkeyEarning = (props) => {
     useEffect(() => {
         (async () => {
 
-           
-        
+
+
             if (account && chainId && library) {
                 web3 = new Web3(library.provider);
                 let nft_stake_contract = new web3.eth.Contract(metadata2, addr2);
@@ -167,31 +167,21 @@ const MonkeyEarning = (props) => {
             web3 = new Web3(library.provider);
             let NFT_Staking_Contract = new web3.eth.Contract(metadata2, addr2);
             let tokenId = Number(token.slice(1, token.length));
-            let rarity;
-
-            L1MonkeyData.map((x) => x.tokenId == tokenId && (rarity = x.rarity));
-
-
-            console.log(tokenId, rarity);
-            console.log('tokenId, rarity');
+            const {rarity} = L1MonkeyData.find(x => x.tokenId === tokenId);
 
             let proof = await getProof(0, { tokenId: tokenId, rarity: rarity });
-            console.log(proof);
-            console.log('proofproofproofproofproofproofproofproofproofproofproof')
             let new_pm = [{
                 'tokenId': tokenId,
-                'C':1,
+                'C':rarity,
                 'proof': proof,
                 'evolution': 0,
                 'timeStaked':Math.floor(Date.now()/1000)
             }];
 
-        
-
-            console.log(new_pm);
-            
             try
             {
+                const gas = await NFT_Staking_Contract.methods.stake(new_pm).estimateGas({from: account});
+                console.log('gas ', gas);
                 let result = await NFT_Staking_Contract.methods.stake(new_pm).send({from: account});
                 console.log(result);
                 console.log("done! Congratrations!");
@@ -204,12 +194,12 @@ const MonkeyEarning = (props) => {
         }
     }
 
-    const stakeAll = async () => 
+    const stakeAll = async () =>
     {
 
     }
 
-    const unStakeAll = async () => 
+    const unStakeAll = async () =>
     {
         if (account && chainId && library) {
             setLoading(true);
@@ -327,9 +317,9 @@ const MonkeyEarning = (props) => {
             <div className='sub-container airdrop-container'>
                 <div className='airdrop-container-top'>
                     <div className='gradient-font container-title'>MY DAILY CLAIMABLE TAK AIRDROP</div>
-                    
+
                     <div className=''>NEXT CLAIMABLE TAK: <TimerComponent/></div>
-                    
+
                 </div>
                 <div className='airdrop-container-middle'>
                     <div className='airdrop-container-middle-left'>
@@ -465,7 +455,7 @@ const MonkeyEarning = (props) => {
                         <ReactApexChart type="area" options={chartOptions} series={chartSeries} height={300}/>
                     </Tab>
                 </Tabs>
-                
+
             </div>
             <LogoFooterComponent />
         </div>
