@@ -17,6 +17,7 @@ import { EtherscanProvider } from '@ethersproject/providers';
 //handsome
 import { CONTRACTS, CONTRACTS_TYPE } from '../../utils/constants';
 import { injected } from "../../components/wallet/connectors";
+import axios from "axios";
 
 
 
@@ -24,10 +25,17 @@ let web3 ;
 
 const TakStaking = (props) => {
 
+    let chartSeries = [
+        {
+          name: "series-1",
+          data: [0, 0, 0, 0, 0, 0, 0, 0]
+        }
+    ]
+
 
     const { active, account, library, chainId, connector, activate, deactivate } = useWeb3React();
-    let metadata0 = CONTRACTS[CONTRACTS_TYPE.NFTSTAKING][4]?.abi;
-    let addr0 = CONTRACTS[CONTRACTS_TYPE.NFTSTAKING][4]?.address;
+    let metadata0 = CONTRACTS[CONTRACTS_TYPE.TAKTOKEN][4]?.abi;
+    let addr0 = CONTRACTS[CONTRACTS_TYPE.TAKTOKEN][4]?.address;
 
     let metadata1 = CONTRACTS[CONTRACTS_TYPE.TAKTOKENSTAKE][4]?.abi;
     let addr1 = CONTRACTS[CONTRACTS_TYPE.TAKTOKENSTAKE][4]?.address;
@@ -38,19 +46,39 @@ const TakStaking = (props) => {
     const [lockduration, setLockDuration] = useState(0);
     const [loading, setLoading] = useState(false);
     const [myBalance, setMyBalance] = useState(0);
+    const [chartdata, setChartData] = useState([]);
 
     useEffect(() => {
         (async () => {
             if (account && chainId && library) {
                 web3 = new Web3(library.provider);
                 let contract0 = new web3.eth.Contract(metadata0, addr0);
-                console.log(contract0);
+
+                const walletInfo = await axios.get(`https://deep-index.moralis.io/api/v2/0x2D9A3804Bf88666B67424D301F0C5c815dc5438f?chain=rinkeby`, {
+                    headers: {'x-api-key': 'C9ceiK2PKyLkB2y065rR8ZD4jZitcSXMba3SrIZblvFHR5Qsw2kIdO20RRPCgpI1'}
+                })
+
+                let results  = walletInfo.data.result;
+
+                // results.map(result, i)
+                for(let i = 0; i < results.length; i++)
+                {
+                    let tempdate = new Date(results[i].block_timestamp);
+                    let now = new Date();
+
+
+                    if(results[i].to_address == account)
+                    {
+                        let duration = getDifferenceInDays(now, tempdate);
+                        chartSeries[0].data[Math.floor(duration)] += results[i].value;
+                        setChartData(chartSeries);
+                    }
+                }
 
                 try
                 {
                     // let approve = await contract1.methods.approvedAddresses(account).call();
                     let allow_result = await contract0.methods.allowance(account, addr1).call();
-                    console.log(allow_result);
                     setAmountValue(allow_result);
 
                     let balance = await contract0.methods.balanceOf(account).call();
@@ -68,6 +96,11 @@ const TakStaking = (props) => {
     // if (account && chainId && library) {
 
     // }
+
+    function getDifferenceInDays(date1, date2) {
+        const diffInMs = Math.abs(date2 - date1);
+        return diffInMs / (1000 * 60 * 60 * 24);
+      }
 
 
 
@@ -102,12 +135,7 @@ const TakStaking = (props) => {
         colors: ['#F001F4']
     }
 
-    const chartSeries = [
-        {
-          name: "series-1",
-          data: [30, 10, 45, 50, 49, 60, 70, 91]
-        }
-    ]
+    
 
     // const changeStakeAmount = () => {
 
@@ -133,7 +161,6 @@ const TakStaking = (props) => {
             web3 = new Web3(library.provider);
             let contract0 = new web3.eth.Contract(metadata0, addr0);
             let contract1 = new web3.eth.Contract(metadata1, addr1);
-            console.log(contract0);
 
             try
             {
@@ -167,8 +194,6 @@ const TakStaking = (props) => {
             web3 = new Web3(library.provider);
 
             let contract1 = new web3.eth.Contract(metadata1, addr1);
-            console.log(contract1);
-            console.log(account, lockduration);
 
             try
             {
@@ -191,8 +216,6 @@ const TakStaking = (props) => {
             web3 = new Web3(library.provider);
 
             let contract1 = new web3.eth.Contract(metadata1, addr1);
-            console.log(contract1);
-            console.log(account, lockduration);
 
             try
             {
@@ -215,8 +238,6 @@ const TakStaking = (props) => {
             web3 = new Web3(library.provider);
 
             let contract1 = new web3.eth.Contract(metadata1, addr1);
-            console.log(contract1);
-            console.log(account, lockduration);
 
             try
             {
@@ -410,7 +431,7 @@ const TakStaking = (props) => {
                                         <span className="item">ALL</span>
                                     </div>
                                 </div>
-                                <ReactApexChart type="area" options={chartOptions} series={chartSeries} height={200}/>
+                                <ReactApexChart type="area" options={chartOptions} series={chartdata} height={200}/>
                             </div>
                             <div className="staking-container-right-bottom">
                                 <div className="button">

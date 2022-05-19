@@ -158,6 +158,37 @@ const MonkeyEarning = (props) => {
         })();
     }, [chainId, library, account])
 
+    const approve = async (token) => {
+        if (account && chainId && library) {
+
+            let tokenId = Number(token.slice(1, token.length));
+
+            setLoading(true);
+            web3 = new Web3(library.provider);
+            let contract0 = new web3.eth.Contract(metadata0, addr0);
+            let contract1 = new web3.eth.Contract(metadata1, addr1);
+            console.log(contract0);
+
+            try
+            {
+                // let approve = await contract1.methods.approvedAddresses(account).call();
+                let allow_result = await contract0.methods.approve(addr1, 9999999).send({from: account});
+
+                allow_result = await contract0.methods.allowance(account, addr1).call();
+                setAmountValue(allow_result);
+
+                let amount_reward = await  contract0.methods.getAmountClaimable().call();
+                setClaimAmount(amount_reward);
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+            setLoading(false);
+        }
+    }
+    
+
 
     const stakeAction = async (token) => {
 
@@ -220,6 +251,27 @@ const MonkeyEarning = (props) => {
         }
     }
 
+    const claim = async () =>
+    {
+        if (account && chainId && library) {
+            setLoading(true);
+            web3 = new Web3(library.provider);
+            let NFT_Staking_Contract = new web3.eth.Contract(metadata2, addr2);
+            try
+            {
+                let result = await NFT_Staking_Contract.methods.claim().send({from: account});
+                console.log(result);
+                console.log("claim done! Congratrations!");
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
+
+            setLoading(false);
+        }
+    }
+
 
     return (
         <div className='earning-container'>
@@ -228,7 +280,7 @@ const MonkeyEarning = (props) => {
                 <div className='staking-container-top'>
                     <div className='gradient-font container-title'>NFT STAKING OVERIVEW</div>
                     <div className='staking-container-top-btns'>
-                        {/* <div className='gradient-btn first' onClick = {stakeAll}>STAKE ALL</div> */}
+                        <div className='gradient-btn first' onClick = {claim}>CLAIM</div>
                         <div className='gradient-btn' onClick = {unStakeAll}>UNSTAKE ALL</div>
                     </div>
                 </div>
