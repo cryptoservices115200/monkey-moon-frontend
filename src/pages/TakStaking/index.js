@@ -217,6 +217,7 @@ const TakStaking = (props) => {
             catch(err)
             {
                 console.log(err);
+                alert("User can stake only once per time. To do another stake, please finish previous stake.");
             }
             setLoading(false);
         }
@@ -239,6 +240,7 @@ const TakStaking = (props) => {
             catch(err)
             {
                 console.log(err);
+                alert("Contract does not have enough TAKs for unstake and reward");
             }
             setLoading(false);
         }
@@ -261,6 +263,7 @@ const TakStaking = (props) => {
             catch(err)
             {
                 console.log(err);
+                alert("Contract does not have enough TAKs");
             }
             setLoading(false);
         }   
@@ -373,7 +376,7 @@ const TakStaking = (props) => {
                                     </div>
                                 )}
 
-                                {account && (approveAmount == 0) && (
+                                {account && (approveAmount > 0) && (
                                     <div className="button-group">
                                         <div className="button" onClick={clickStake}>STAKE</div>
                                         <div className="button" onClick={clickUnStake}>UNSTAKE</div>
@@ -381,7 +384,7 @@ const TakStaking = (props) => {
                                     </div> )
                                 }
 
-                                {account && (approveAmount > 0) && (
+                                {account && (approveAmount == 0) && (
                                     <div className="button-group">
                                         <div className="button" onClick={approve}>approve</div>
                                     </div> )
