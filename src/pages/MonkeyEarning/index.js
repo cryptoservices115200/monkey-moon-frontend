@@ -162,7 +162,7 @@ const MonkeyEarning = (props) => {
                 }
             }
         })();
-    }, [chainId, library, account])
+    }, [chainId, library, account, loading])
  
     const stakeAction = async (token) => {
 
@@ -188,7 +188,7 @@ const MonkeyEarning = (props) => {
 
             try
             {
-                const approve_result = await NFT_Mint_Contract.methods.approve(addr2, tokenId).send({from: account});
+                // const approve_result = await NFT_Mint_Contract.methods.approve(addr2, tokenId).send({from: account});
                 const gas = await NFT_Staking_Contract.methods.stake(new_pm).estimateGas({from: account});
                 console.log('gas ', gas);
                 let result = await NFT_Staking_Contract.methods.stake(new_pm).send({from: account});
