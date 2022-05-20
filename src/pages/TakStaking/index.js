@@ -144,7 +144,7 @@ const TakStaking = (props) => {
         colors: ['#F001F4']
     }
 
-    
+
 
     // const changeStakeAmount = () => {
 
@@ -169,7 +169,7 @@ const TakStaking = (props) => {
             setLoading(true);
             web3 = new Web3(library.provider);
             let contract0 = new web3.eth.Contract(metadata0, addr0);
-            
+
 
             try
             {
@@ -177,7 +177,7 @@ const TakStaking = (props) => {
                 let amountToApprove = new BigNumber(999999).multipliedBy(10 ** 18)
                 let allow_result = await contract0.methods.approve(addr1, amountToApprove).send({from: account});
 
-                allow_result = await contract0.methods.approve(account, amountToApprove).send({from: account});
+                allow_result = await contract0.methods.approve(account, amountToApprove.toString()).send({from: account});
 
                 allow_result = await contract0.methods.allowance(account, addr1).call();
                 setAmountValue(allow_result);
@@ -212,7 +212,7 @@ const TakStaking = (props) => {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
                 let amountToStake = new BigNumber(amountStake).multipliedBy(10 ** 18)
                 let mint_result = await contract1.methods.stake(amountToStake, lockduration).send({from: account});
-                
+
             }
             catch(err)
             {
@@ -235,7 +235,7 @@ const TakStaking = (props) => {
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
                 let mint_result = await contract1.methods.unstake().send({from: account});
-                
+
             }
             catch(err)
             {
@@ -258,7 +258,7 @@ const TakStaking = (props) => {
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
                 let mint_result = await contract1.methods.claim().send({from: account});
-                
+
             }
             catch(err)
             {
@@ -266,7 +266,7 @@ const TakStaking = (props) => {
                 alert("Contract does not have enough TAKs");
             }
             setLoading(false);
-        }   
+        }
     }
 
     const clickLockDuration = (day) => {
@@ -275,7 +275,7 @@ const TakStaking = (props) => {
 
     //amountStake
     if(loading)
-    {  
+    {
         return (
             <div className="staking-container">
                 <div style={{margin:'15% 40%'}}>
@@ -343,7 +343,7 @@ const TakStaking = (props) => {
                                     </div>
                                 </div>
                                 <div className="stake-component ph-show wnd-hide">
-                                    
+
                                     <div className="info">
                                     <div className="title">
                                         <img src={StarImg} alt="star" />
@@ -364,8 +364,8 @@ const TakStaking = (props) => {
                                             On BSCscan.com
                                             <img src={BNBImg} alt="bnb_image" />
                                         </div>
-                                        
-                                        
+
+
                                     </div>
                                 </div>
                             </div>
