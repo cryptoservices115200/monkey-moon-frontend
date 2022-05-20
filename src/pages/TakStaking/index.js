@@ -169,6 +169,7 @@ const TakStaking = (props) => {
             setLoading(true);
             web3 = new Web3(library.provider);
             let contract0 = new web3.eth.Contract(metadata0, addr0);
+            let contract1 = new web3.eth.Contract(metadata1, addr1);
             
 
             try
@@ -182,7 +183,7 @@ const TakStaking = (props) => {
                 allow_result = await contract0.methods.allowance(account, addr1).call();
                 setAmountValue(allow_result);
 
-                let amount_reward = await  contract0.methods.getAmountClaimable().call();
+                let amount_reward = await  contract1.methods.getAmountClaimable().call();
                 setClaimAmount(amount_reward);
             }
             catch(err)
