@@ -130,7 +130,6 @@ const MonkeyEarning = (props) => {
                 let NFT_Staking_Contract = new web3.eth.Contract(metadata2, addr2);
                 try
                 {
-                    // let approve = await contract1.methods.approvedAddresses(account).call();
 
                     const approve_result = await NFT_Mint_Contract.methods.isApprovedForAll(account, addr2).call();
                     console.log(approve_result);

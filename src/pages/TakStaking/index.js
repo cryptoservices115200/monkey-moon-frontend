@@ -48,11 +48,14 @@ const TakStaking = (props) => {
     const [myBalance, setMyBalance] = useState(0);
     const [chartdata, setChartData] = useState([]);
 
+    const [amount, setAmount] = useState(0);
+
     useEffect(() => {
         (async () => {
             if (account && chainId && library) {
                 web3 = new Web3(library.provider);
                 let contract0 = new web3.eth.Contract(metadata0, addr0);
+                let contract1 = new web3.eth.Contract(metadata1, addr1);
 
                 const walletInfo = await axios.get(`https://deep-index.moralis.io/api/v2/0x2D9A3804Bf88666B67424D301F0C5c815dc5438f?chain=rinkeby`, {
                     headers: {'x-api-key': 'C9ceiK2PKyLkB2y065rR8ZD4jZitcSXMba3SrIZblvFHR5Qsw2kIdO20RRPCgpI1'}
@@ -77,7 +80,10 @@ const TakStaking = (props) => {
 
                 try
                 {
-                    // let approve = await contract1.methods.approvedAddresses(account).call();
+                    let staked = await contract1.methods.staked().call();
+                    console.log(staked.amount);
+                    console.log('staked.amount');
+
                     let allow_result = await contract0.methods.allowance(account, addr1).call();
                     setAmountValue(allow_result);
 
@@ -160,7 +166,7 @@ const TakStaking = (props) => {
             setLoading(true);
             web3 = new Web3(library.provider);
             let contract0 = new web3.eth.Contract(metadata0, addr0);
-            let contract1 = new web3.eth.Contract(metadata1, addr1);
+            
 
             try
             {
