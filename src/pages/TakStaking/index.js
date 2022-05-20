@@ -83,6 +83,7 @@ const TakStaking = (props) => {
                     let staked = await contract1.methods.staked().call();
                     console.log(staked.amount);
                     console.log('staked.amount');
+                    setAmount(staked.amount);
 
                     let allow_result = await contract0.methods.allowance(account, addr1).call();
                     setAmountValue(allow_result);
@@ -285,6 +286,7 @@ const TakStaking = (props) => {
                             <div className="staking-container-left-top">
                                 <div className="title">
                                     Available Staked TAK Balance {myBalance}
+                                    <div style={{float:'right'}}>{amount}</div>
                                 </div>
                                 <div className="stake-component ph-hide wnd-show">
                                     <div className="title">
