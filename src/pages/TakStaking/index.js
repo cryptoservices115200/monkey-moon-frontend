@@ -80,13 +80,14 @@ const TakStaking = (props) => {
 
                 try
                 {
-                    let staked = await contract1.methods.staked().call();
-                    console.log(staked.amount);
+                    let staked = await contract1.methods.getAmountClaimable().call();
+                    console.log(staked);
                     console.log('staked.amount');
-                    setAmount(staked.amount);
+                    setAmount(staked);
 
                     let allow_result = await contract0.methods.allowance(account, addr1).call();
                     setAmountValue(allow_result);
+                    console.log("A++++++++++++++++++++", allow_result)
 
                     let balance = await contract0.methods.balanceOf(account).call();
                     setMyBalance(balance / (10 ** 18));
