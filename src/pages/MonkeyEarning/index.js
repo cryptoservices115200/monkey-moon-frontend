@@ -203,11 +203,6 @@ const MonkeyEarning = (props) => {
         }
     }
 
-    const stakeAll = async () =>
-    {
-
-    }
-
     const unStakeAll = async () =>
     {
         if (account && chainId && library) {
@@ -250,7 +245,17 @@ const MonkeyEarning = (props) => {
         }
     }
 
-
+    if(loading)
+    {  
+        return (
+            <div className="staking-container">
+                <div style={{margin:'15% 40%'}}>
+                    <Hearts color="#F001F4" height={280} width={280}/>
+                </div>
+            </div>
+        )
+    }
+    else
     return (
         <div className='earning-container'>
             <div className='gradient-font earning-container-title'>MY MONKEY EARNINGS</div>
