@@ -169,12 +169,9 @@ const TakStaking = (props) => {
             setLoading(true);
             web3 = new Web3(library.provider);
             let contract0 = new web3.eth.Contract(metadata0, addr0);
-<<<<<<< HEAD
+            
             let contract1 = new web3.eth.Contract(metadata1, addr1);
             
-=======
-
->>>>>>> 37a60f7127169064765f8a6e91a321ec312c65cd
 
             try
             {
