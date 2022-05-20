@@ -47,7 +47,6 @@ const MonkeyEarning = (props) => {
                 })
         );
 
-        console.log(trees);
         let roots = trees.map((tree) => tree.getHexRoot().toString());
         console.log("Roots: ", roots);
 
@@ -115,6 +114,7 @@ const MonkeyEarning = (props) => {
     const [myBalance, setMyBalance] = useState(0);
     const [myNFTData, setMyNFTData] = useState([]);
     const [tokeIdList, setTokeIdList] = useState([]);
+    const [allApprove, setAllApprove] = useState(false);
 
     let base_uri = "https://ipfs.io/ipfs/QmT7a4eC1VnwPLK7wzF8jFZU5jDpuPi9KqQ8Kq386tpere/";
 
@@ -125,30 +125,37 @@ const MonkeyEarning = (props) => {
 
             if (account && chainId && library) {
                 web3 = new Web3(library.provider);
-                let nft_stake_contract = new web3.eth.Contract(metadata2, addr2);
-                console.log(nft_stake_contract);
+
+                let NFT_Mint_Contract = new web3.eth.Contract(metadata1, addr1);
+                let NFT_Staking_Contract = new web3.eth.Contract(metadata2, addr2);
                 try
                 {
                     // let approve = await contract1.methods.approvedAddresses(account).call();
+
+                    const approve_result = await NFT_Mint_Contract.methods.isApprovedForAll(account, addr2).call();
+                    console.log(approve_result);
+                    setAllApprove(approve_result)
+                    if(!approve_result)
+                    {
+                        const setAppr = await NFT_Mint_Contract.methods.setApprovalForAll(addr2, true).send({from: account});
+                        console.log("SUCCESS Approved !!!");
+                    }
+                    
+
                     let temp_array = [];
-                    let allow_result = await nft_stake_contract.methods.getNFTsByOwner(account, 0).call();   //0x16836190dd89aa4aea5f036e3270cb09f8e84790
+                    let allow_result = await NFT_Staking_Contract.methods.getNFTsByOwner(account, 0).call();   //0x16836190dd89aa4aea5f036e3270cb09f8e84790
                     setTokeIdList(allow_result);
                     for ( let i = 0; i < allow_result.length; i++)
                     {
                         let temp_url = base_uri + allow_result[i] + '.json';
 
-                        // fetch(temp_url).then(response => response.json()).then(data => temp_array.push(data));
 
                         let temp_json = await fetch(temp_url);
                         temp_json = await temp_json.json();
                         temp_array.push(temp_json);
                     }
                     setMyNFTData(temp_array);
-                    console.log(temp_array);
-                    // setAmountValue(allow_result);
 
-                    // let balance = await nft_stake_contract.methods.balanceOf(account).call();
-                    // setMyBalance(balance / (10 ** 18));
                 }
                 catch(err)
                 {
@@ -157,39 +164,7 @@ const MonkeyEarning = (props) => {
             }
         })();
     }, [chainId, library, account])
-
-    const approve = async (token) => {
-        if (account && chainId && library) {
-
-            let tokenId = Number(token.slice(1, token.length));
-
-            setLoading(true);
-            web3 = new Web3(library.provider);
-            let contract0 = new web3.eth.Contract(metadata0, addr0);
-            let contract1 = new web3.eth.Contract(metadata1, addr1);
-            console.log(contract0);
-
-            try
-            {
-                // let approve = await contract1.methods.approvedAddresses(account).call();
-                let allow_result = await contract0.methods.approve(addr1, 9999999).send({from: account});
-
-                allow_result = await contract0.methods.allowance(account, addr1).call();
-                setAmountValue(allow_result);
-
-                let amount_reward = await  contract0.methods.getAmountClaimable().call();
-                setClaimAmount(amount_reward);
-            }
-            catch(err)
-            {
-                console.log(err);
-            }
-            setLoading(false);
-        }
-    }
-    
-
-
+ 
     const stakeAction = async (token) => {
 
         // alert(Math.floor(Date.now()/1000));
@@ -197,6 +172,9 @@ const MonkeyEarning = (props) => {
             setLoading(true);
             web3 = new Web3(library.provider);
             let NFT_Staking_Contract = new web3.eth.Contract(metadata2, addr2);
+
+            let NFT_Mint_Contract = new web3.eth.Contract(metadata1, addr1);
+
             let tokenId = Number(token.slice(1, token.length));
             const {rarity} = L1MonkeyData.find(x => x.tokenId === tokenId);
 
@@ -211,6 +189,7 @@ const MonkeyEarning = (props) => {
 
             try
             {
+                const approve_result = await NFT_Mint_Contract.methods.approve(addr2, tokenId).send({from: account});
                 const gas = await NFT_Staking_Contract.methods.stake(new_pm).estimateGas({from: account});
                 console.log('gas ', gas);
                 let result = await NFT_Staking_Contract.methods.stake(new_pm).send({from: account});
