@@ -174,10 +174,11 @@ const TakStaking = (props) => {
             try
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
-                let amountToApprove = new BigNumber(999999).multipliedBy(10 ** 18)
+                let amountToApprove = 100000000;
+                console.log('-----', amountToApprove)
                 let allow_result = await contract0.methods.approve(addr1, amountToApprove).send({from: account});
 
-                allow_result = await contract0.methods.approve(account, amountToApprove.toString()).send({from: account});
+                allow_result = await contract0.methods.approve(account, amountToApprove).send({from: account});
 
                 allow_result = await contract0.methods.allowance(account, addr1).call();
                 setAmountValue(allow_result);
