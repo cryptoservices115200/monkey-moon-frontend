@@ -18,6 +18,7 @@ import { EtherscanProvider } from '@ethersproject/providers';
 import { CONTRACTS, CONTRACTS_TYPE } from '../../utils/constants';
 import { injected } from "../../components/wallet/connectors";
 import axios from "axios";
+import BigNumber from 'bignumber.js';
 
 
 
@@ -98,7 +99,7 @@ const TakStaking = (props) => {
                 }
             }
         })();
-    }, [chainId, library, account])
+    }, [chainId, library, account, loading])
 
 
     // if (account && chainId && library) {
@@ -173,7 +174,8 @@ const TakStaking = (props) => {
             try
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
-                let allow_result = await contract0.methods.approve(addr1, 9999999).send({from: account});
+                let amountToApprove = new BigNumber(999999).multipliedBy(10 ** 18)
+                let allow_result = await contract0.methods.approve(addr1, amountToApprove).send({from: account});
 
                 allow_result = await contract0.methods.allowance(account, addr1).call();
                 setAmountValue(allow_result);
@@ -206,7 +208,8 @@ const TakStaking = (props) => {
             try
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
-                let mint_result = await contract1.methods.stake(amountStake, lockduration).send({from: account});
+                let amountToStake = new BigNumber(amountStake).multipliedBy(10 ** 18)
+                let mint_result = await contract1.methods.stake(amountToStake, lockduration).send({from: account});
                 
             }
             catch(err)
