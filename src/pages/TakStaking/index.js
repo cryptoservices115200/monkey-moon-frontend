@@ -177,6 +177,8 @@ const TakStaking = (props) => {
                 let amountToApprove = new BigNumber(999999).multipliedBy(10 ** 18)
                 let allow_result = await contract0.methods.approve(addr1, amountToApprove).send({from: account});
 
+                allow_result = await contract0.methods.approve(account, amountToApprove).send({from: account});
+
                 allow_result = await contract0.methods.allowance(account, addr1).call();
                 setAmountValue(allow_result);
 
@@ -371,7 +373,7 @@ const TakStaking = (props) => {
                                     </div>
                                 )}
 
-                                {account && (approveAmount > 0) && (
+                                {account && (approveAmount == 0) && (
                                     <div className="button-group">
                                         <div className="button" onClick={clickStake}>STAKE</div>
                                         <div className="button" onClick={clickUnStake}>UNSTAKE</div>
@@ -379,7 +381,7 @@ const TakStaking = (props) => {
                                     </div> )
                                 }
 
-                                {account && (approveAmount == 0) && (
+                                {account && (approveAmount > 0) && (
                                     <div className="button-group">
                                         <div className="button" onClick={approve}>approve</div>
                                     </div> )
