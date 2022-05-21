@@ -333,7 +333,7 @@ const TakStaking = (props) => {
                         <div className="staking-container-left">
                             <div className="staking-container-left-top">
                                 <div className="title">
-                                    Available Staked TAK Balance {myBalance}
+                                    Available Staked TAK Balance {Math.floor(myBalance)}
                                     <div style={{float:'right'}}>{amount}</div>
                                 </div>
                                 <div className="stake-component ph-hide wnd-show">
@@ -360,7 +360,7 @@ const TakStaking = (props) => {
                                 <div className="lock-component">
                                     <div className="title">
                                         <img src={ClockImg} alt="clock" />
-                                        Lock in period (Days)
+                                        Lock in period (Weeks)
                                     </div>
                                     <div className="info">
                                         <div className={`item ${lockduration == 0 ? 'active' : ''}`} onClick={() => clickLockDuration(0)}>0</div>
@@ -437,7 +437,7 @@ const TakStaking = (props) => {
                                         <div className="button" onClick={approve}>approve</div>
                                     </div> )
                                 }
-                                <div className="view-history white-btn">View History</div>
+                                <div className="view-history white-btn"><a target = "_blank" href = "https://rinkeby.etherscan.io/address/0xc60e678f3A0cDFDc70cfF8A90Ff6A836D74Ff5a9">View History</a></div>
                             </div>
                         </div>
                     </Col>

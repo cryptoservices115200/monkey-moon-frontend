@@ -301,7 +301,7 @@ const MonkeyEarning = (props) => {
                             </div>
                         )}
                         
-                        {account && (
+                        {(account && (unstakedcount > 0)) && (
                             <>
                                 <div className='gradient-btn first' onClick = {claim}>CLAIM</div>
                                 <div className='gradient-btn' onClick = {unStakeAll}>UNSTAKE ALL</div>
@@ -336,14 +336,14 @@ const MonkeyEarning = (props) => {
                     ))}
                 </div>
                 <div className='staking-container-bottom'>
-                    <div className='staking-container-bottom-item'>
+                    {/* <div className='staking-container-bottom-item'>
                         <div className='pink-font'>AVG PAYOUT</div>
                         <div className=''>209</div>
                     </div>
                     <div className='staking-container-bottom-item'>
                         <div className='pink-font'>AVG PAYOUT</div>
                         <div className=''>871</div>
-                    </div>
+                    </div> */}
                     <div className='staking-container-bottom-item'>
                         <div className='pink-font'>UNSTAKED</div>
                         <div className=''>{stakedcount}</div>
@@ -352,10 +352,10 @@ const MonkeyEarning = (props) => {
                         <div className='pink-font'>STAKED</div>
                         <div className=''>{unstakedcount}</div>
                     </div>
-                    <div className='staking-container-bottom-item'>
+                    {/* <div className='staking-container-bottom-item'>
                         <div className='pink-font'>UNLINKED</div>
                         <div className=''>76</div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className='sub-container assets-container'>
