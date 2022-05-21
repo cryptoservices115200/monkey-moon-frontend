@@ -113,8 +113,11 @@ const MonkeyEarning = (props) => {
     const [loading, setLoading] = useState(false);
     const [myBalance, setMyBalance] = useState(0);
     const [myNFTData, setMyNFTData] = useState([]);
-    const [tokeIdList, setTokeIdList] = useState([]);
+    const [tokenIdList, setTokenIdList] = useState([]);
     const [allApprove, setAllApprove] = useState(false);
+
+    const [myStakedNFTData, setMyStakedNFTData] = useState([]);
+    const [stakedTokeIdList, setStakedTokenIdList] = useState([]);
 
     let base_uri = "https://ipfs.io/ipfs/QmT7a4eC1VnwPLK7wzF8jFZU5jDpuPi9KqQ8Kq386tpere/";
 
@@ -143,7 +146,8 @@ const MonkeyEarning = (props) => {
 
                     let temp_array = [];
                     let allow_result = await NFT_Staking_Contract.methods.getNFTsByOwner(account, 0).call();   //0x16836190dd89aa4aea5f036e3270cb09f8e84790
-                    setTokeIdList(allow_result);
+                    console.log("Funcking..........................." , allow_result);
+
                     for ( let i = 0; i < allow_result.length; i++)
                     {
                         let temp_url = base_uri + allow_result[i] + '.json';
@@ -153,7 +157,23 @@ const MonkeyEarning = (props) => {
                         temp_json = await temp_json.json();
                         temp_array.push(temp_json);
                     }
+                    setTokenIdList(allow_result);
                     setMyNFTData(temp_array);
+
+                    temp_array = [];
+
+                    allow_result = await NFT_Staking_Contract.methods.getStakedMonkeysByUser(account).call();
+                    console.log("Funcking+++++++++++++++++++++++++++" , allow_result);
+                    for ( let i = 0; i < allow_result.length; i++)
+                    {
+                        let temp_url = base_uri + allow_result[i].tokenId + '.json';
+
+
+                        let temp_json = await fetch(temp_url);
+                        temp_json = await temp_json.json();
+                        temp_array.push(temp_json);
+                    }
+                    setMyStakedNFTData(temp_array);
 
                 }
                 catch(err)
@@ -277,6 +297,19 @@ const MonkeyEarning = (props) => {
                             <div className="staking-container-top-collection-font" style = {{marginTop:'5px'}}>{data.name}</div>
                             <img src={data.image} className = "staking-container-top-collection-image" alt={data.name} width = {'30px'} />
                             <div className='gradient-btn staking-container-top-collection-btn' onClick={() => stakeAction(data.name)}>STAKE</div>
+                        </div>
+                    ))}
+                </div>
+                <div className='staking-container-top nft_container'>
+                    {myStakedNFTData.map((data, index) => (
+                        <div
+                            key={index}
+                            className="staking-container-top-collection"
+                            // onClick={() => handleLogin(data.name)}
+                        >
+                            <div className="staking-container-top-collection-font" style = {{marginTop:'5px'}}>{data.name}</div>
+                            <img src={data.image} className = "staking-container-top-collection-image" alt={data.name} width = {'30px'} />
+                            <div className='gradient-btn staking-container-top-collection-btn' onClick={() => unStakeAll()}>UNSTAKE</div>
                         </div>
                     ))}
                 </div>

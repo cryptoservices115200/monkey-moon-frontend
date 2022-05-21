@@ -50,6 +50,9 @@ const TakStaking = (props) => {
     const [chartdata, setChartData] = useState([]);
 
     const [amount, setAmount] = useState(0);
+    const [totalRewards, setTotalRewards] = useState(0);
+    const [myRewards, setMyRewards] = useState(0);
+    const [rewardsum, setRewardSum] = useState(0);
 
     useEffect(() => {
         (async () => {
@@ -69,13 +72,18 @@ const TakStaking = (props) => {
                 {
                     let tempdate = new Date(results[i].block_timestamp);
                     let now = new Date();
+                    let total = 0;
 
 
                     if(results[i].to_address == account)
                     {
                         let duration = getDifferenceInDays(now, tempdate);
                         chartSeries[0].data[Math.floor(duration)] += results[i].value;
+
+                        total += results[i].value;
+
                         setChartData(chartSeries);
+                        setRewardSum(total);
                     }
                 }
 
@@ -92,6 +100,26 @@ const TakStaking = (props) => {
 
                     let balance = await contract0.methods.balanceOf(account).call();
                     setMyBalance(balance / (10 ** 18));
+
+                    let temp_val = await contract1.methods.lastRewardsPool().call();
+                    // totalRewards_tmp = new BigNumber(totalRewards_tmp).dividedBy(10 ** 18);
+                    temp_val = temp_val / (10 ** 18);
+                    console.log("lastRewardsPool: ", temp_val)
+                    setTotalRewards(Math.floor(temp_val));
+
+                    temp_val = await contract1.methods.userToRewards(account).call();
+                    temp_val = temp_val / (10 ** 18);
+                    console.log("MyRewardsPool: ", temp_val);
+                    setMyRewards(Math.floor(temp_val));
+
+                    temp_val = await contract1.methods.stakeStructs(account).call();
+                    console.log("MYstakeStructs: ", temp_val);
+                    // setMyRewards(Math.floor(temp_val));
+
+                    
+
+                    
+                    
                 }
                 catch(err)
                 {
@@ -169,7 +197,7 @@ const TakStaking = (props) => {
             setLoading(true);
             web3 = new Web3(library.provider);
             let contract0 = new web3.eth.Contract(metadata0, addr0);
-            
+
             let contract1 = new web3.eth.Contract(metadata1, addr1);
             
 
@@ -404,11 +432,11 @@ const TakStaking = (props) => {
                                         <div className="title">Market Data</div>
                                         <div className="detail">
                                             <div className="sub-title">Total Tak Reward Pool</div>
-                                            <div className="info">X TAK</div>
+                                            <div className="info">{totalRewards} TAK</div>
                                         </div>
                                         <div className="detail">
                                             <div className="sub-title">Total Tak Rewards Left</div>
-                                            <div className="info">X TAK</div>
+                                            <div className="info">{claimAmount} TAK</div>
                                         </div>
                                         <div className="detail">
                                             <div className="sub-title">TAK Circ. Supply Staked</div>
@@ -423,11 +451,11 @@ const TakStaking = (props) => {
                                         <div className="title">My Data</div>
                                         <div className="detail">
                                             <div className="sub-title">My TAK Staked</div>
-                                            <div className="info">X TAK</div>
+                                            <div className="info">{myRewards} TAK</div>
                                         </div>
                                         <div className="detail">
                                             <div className="sub-title">My TAK Earned</div>
-                                            <div className="info">X TAK</div>
+                                            <div className="info">{rewardsum} TAK</div>
                                         </div>
                                         <div className="detail">
                                             <div className="sub-title">Locked Until</div>
