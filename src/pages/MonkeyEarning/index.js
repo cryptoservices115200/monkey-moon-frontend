@@ -26,7 +26,7 @@ const { ethers } = require("ethers");
 
 // const keccak256 = require('keccak256');
 
-let web3 ;
+let web3;
 
 const MonkeyEarning = (props) => {
 
@@ -118,6 +118,8 @@ const MonkeyEarning = (props) => {
 
     const [myStakedNFTData, setMyStakedNFTData] = useState([]);
     const [stakedTokeIdList, setStakedTokenIdList] = useState([]);
+    const [unstakedcount, setUnstakedcount] = useState(0);
+    const [stakedcount, setStakedcount] = useState(0);
 
     let base_uri = "https://ipfs.io/ipfs/QmT7a4eC1VnwPLK7wzF8jFZU5jDpuPi9KqQ8Kq386tpere/";
 
@@ -157,6 +159,7 @@ const MonkeyEarning = (props) => {
                         temp_json = await temp_json.json();
                         temp_array.push(temp_json);
                     }
+                    setStakedcount(allow_result.length);
                     setTokenIdList(allow_result);
                     setMyNFTData(temp_array);
 
@@ -173,6 +176,7 @@ const MonkeyEarning = (props) => {
                         temp_json = await temp_json.json();
                         temp_array.push(temp_json);
                     }
+                    setUnstakedcount(allow_result.length);
                     setMyStakedNFTData(temp_array);
 
                 }
@@ -183,6 +187,14 @@ const MonkeyEarning = (props) => {
             }
         })();
     }, [chainId, library, account, loading])
+
+    function connect() {
+        setLoading(true);
+        activate(injected, async (error) => {
+            console.log(error);
+        });
+        setLoading(false);
+    }
  
     const stakeAction = async (token) => {
 
@@ -283,8 +295,18 @@ const MonkeyEarning = (props) => {
                 <div className='staking-container-top'>
                     <div className='gradient-font container-title'>NFT STAKING OVERIVEW</div>
                     <div className='staking-container-top-btns'>
-                        <div className='gradient-btn first' onClick = {claim}>CLAIM</div>
-                        <div className='gradient-btn' onClick = {unStakeAll}>UNSTAKE ALL</div>
+                        {!account && (
+                            <div className="button-group">
+                                <div className="gradient-btn button" onClick={connect}>Connect Wallet</div>
+                            </div>
+                        )}
+                        
+                        {account && (
+                            <>
+                                <div className='gradient-btn first' onClick = {claim}>CLAIM</div>
+                                <div className='gradient-btn' onClick = {unStakeAll}>UNSTAKE ALL</div>
+                            </>
+                        )}
                     </div>
                 </div>
                 <div className='staking-container-top nft_container'>
@@ -295,7 +317,7 @@ const MonkeyEarning = (props) => {
                             // onClick={() => handleLogin(data.name)}
                         >
                             <div className="staking-container-top-collection-font" style = {{marginTop:'5px'}}>{data.name}</div>
-                            <img src={data.image} className = "staking-container-top-collection-image" alt={data.name} width = {'30px'} />
+                            <img src={data.image} className = "staking-container-top-collection-image" alt={data.name} />
                             <div className='gradient-btn staking-container-top-collection-btn' onClick={() => stakeAction(data.name)}>STAKE</div>
                         </div>
                     ))}
@@ -308,7 +330,7 @@ const MonkeyEarning = (props) => {
                             // onClick={() => handleLogin(data.name)}
                         >
                             <div className="staking-container-top-collection-font" style = {{marginTop:'5px'}}>{data.name}</div>
-                            <img src={data.image} className = "staking-container-top-collection-image" alt={data.name} width = {'30px'} />
+                            <img src={data.image} className = "staking-container-top-collection-image" alt={data.name} />
                             <div className='gradient-btn staking-container-top-collection-btn' onClick={() => unStakeAll()}>UNSTAKE</div>
                         </div>
                     ))}
@@ -323,12 +345,12 @@ const MonkeyEarning = (props) => {
                         <div className=''>871</div>
                     </div>
                     <div className='staking-container-bottom-item'>
-                        <div className='pink-font'>AVG PAYOUT</div>
-                        <div className=''>63</div>
+                        <div className='pink-font'>UNSTAKED</div>
+                        <div className=''>{stakedcount}</div>
                     </div>
                     <div className='staking-container-bottom-item'>
-                        <div className='pink-font'>UNSTAKED</div>
-                        <div className=''>9</div>
+                        <div className='pink-font'>STAKED</div>
+                        <div className=''>{unstakedcount}</div>
                     </div>
                     <div className='staking-container-bottom-item'>
                         <div className='pink-font'>UNLINKED</div>

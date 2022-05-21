@@ -52,7 +52,7 @@ const TakStaking = (props) => {
     const [amount, setAmount] = useState(0);
     const [totalRewards, setTotalRewards] = useState(0);
     const [myRewards, setMyRewards] = useState(0);
-    const [rewardsum, setRewardSum] = useState(0);
+    const [rewardSum, setRewardSum] = useState(0);
 
     useEffect(() => {
         (async () => {
@@ -134,6 +134,14 @@ const TakStaking = (props) => {
 
     // }
 
+    async function isStaked() {
+            if (account && chainId && library) {
+                let contract1 = new web3.eth.Contract(metadata1, addr1);
+                let result = await contract1.methods.isStaked(account).call();
+                return result;
+            }
+    }
+
     function getDifferenceInDays(date1, date2) {
         const diffInMs = Math.abs(date2 - date1);
         return diffInMs / (1000 * 60 * 60 * 24);
@@ -206,9 +214,9 @@ const TakStaking = (props) => {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
                 let amountToApprove = 100000000;
                 console.log('-----', amountToApprove)
-                let allow_result = await contract0.methods.approve(addr1, amountToApprove).send({from: account});
+                // let allow_result = await contract0.methods.approve(addr1, amountToApprove).send({from: account});
 
-                allow_result = await contract0.methods.approve(account, amountToApprove).send({from: account});
+                let allow_result = await contract0.methods.approve(account, amountToApprove).send({from: account});
 
                 allow_result = await contract0.methods.allowance(account, addr1).call();
                 setAmountValue(allow_result);
@@ -409,9 +417,18 @@ const TakStaking = (props) => {
 
                                 {account && (approveAmount > 0) && (
                                     <div className="button-group">
-                                        <div className="button" onClick={clickStake}>STAKE</div>
-                                        <div className="button" onClick={clickUnStake}>UNSTAKE</div>
-                                        <div className="button" onClick={clickClaim}>CLAIM</div>
+                                        {
+                                            !isStaked() ?
+                                                (<div className="button" onClick={clickStake}>STAKE</div>)
+                                            :
+                                                (
+                                                    <>
+                                                        <div className="button" onClick={clickUnStake}>UNSTAKE</div>
+                                                        <div className="button" onClick={clickClaim}>CLAIM</div>
+                                                    </>
+                                                )
+                                        }
+                                        
                                     </div> )
                                 }
 
@@ -438,14 +455,14 @@ const TakStaking = (props) => {
                                             <div className="sub-title">Total Tak Rewards Left</div>
                                             <div className="info">{claimAmount} TAK</div>
                                         </div>
-                                        <div className="detail">
+                                        {/* <div className="detail">
                                             <div className="sub-title">TAK Circ. Supply Staked</div>
                                             <div className="info">X%</div>
                                         </div>
                                         <div className="detail">
                                             <div className="sub-title">TVL</div>
                                             <div className="info">$X</div>
-                                        </div>
+                                        </div> */}
                                     </Col>
                                     <Col sm={12} md={6}>
                                         <div className="title">My Data</div>
@@ -455,16 +472,16 @@ const TakStaking = (props) => {
                                         </div>
                                         <div className="detail">
                                             <div className="sub-title">My TAK Earned</div>
-                                            <div className="info">{rewardsum} TAK</div>
+                                            <div className="info">{rewardSum} TAK</div>
                                         </div>
-                                        <div className="detail">
+                                        {/* <div className="detail">
                                             <div className="sub-title">Locked Until</div>
                                             <div className="info">XX/XX/XX</div>
                                         </div>
                                         <div className="detail">
                                             <div className="sub-title">APY</div>
                                             <div className="info">X%</div>
-                                        </div>
+                                        </div> */}
                                     </Col>
                                 </Row>
                                 <div className="ph-show wnd-hide">
