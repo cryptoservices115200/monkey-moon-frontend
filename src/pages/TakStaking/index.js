@@ -115,10 +115,6 @@ const TakStaking = (props) => {
                     temp_val = await contract1.methods.stakeStructs(account).call();
                     console.log("MYstakeStructs: ", temp_val);
                     // setMyRewards(Math.floor(temp_val));
-
-                    
-
-                    
                     
                 }
                 catch(err)
@@ -212,11 +208,12 @@ const TakStaking = (props) => {
             try
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
-                let amountToApprove = 100000000;
+                let amountToApprove = new BigNumber(100000000).multipliedBy(10 ** 18);
+               
                 console.log('-----', amountToApprove)
-                // let allow_result = await contract0.methods.approve(addr1, amountToApprove).send({from: account});
+                let allow_result = await contract0.methods.approve(addr1, amountToApprove).send({from: account});
 
-                let allow_result = await contract0.methods.approve(account, amountToApprove).send({from: account});
+                // let allow_result = await contract0.methods.approve(account, amountToApprove).send({from: account});
 
                 allow_result = await contract0.methods.allowance(account, addr1).call();
                 setAmountValue(allow_result);
@@ -431,6 +428,11 @@ const TakStaking = (props) => {
                                         
                                     </div> )
                                 }
+                                {/* <div className="button-group">
+                                    <div className="button" onClick={clickStake}>STAKE</div>
+                                    <div className="button" onClick={clickUnStake}>UNSTAKE</div>
+                                    <div className="button" onClick={clickClaim}>CLAIM</div>
+                                </div> */}
 
                                 {account && (approveAmount == 0) && (
                                     <div className="button-group">
