@@ -19,7 +19,8 @@ import { CONTRACTS, CONTRACTS_TYPE } from '../../utils/constants';
 import { injected } from "../../components/wallet/connectors";
 import axios from "axios";
 // import BigNumber from 'bignumber.js';
-import { BigNumber } from "@ethersproject/bignumber";
+import BigNumber from 'big-number';
+
 
 
 
@@ -42,7 +43,7 @@ const TakStaking = (props) => {
     let metadata1 = CONTRACTS[CONTRACTS_TYPE.TAKTOKENSTAKE][4]?.abi;
     let addr1 = CONTRACTS[CONTRACTS_TYPE.TAKTOKENSTAKE][4]?.address;
 
-    const [approveAmount, setAmountValue] = useState(0);
+    const [approveAmount, setAmountValue] = useState(-1);
     const [claimAmount, setClaimAmount] = useState(0);
     const [amountStake, setAmountStake] = useState(0);
     const [lockduration, setLockDuration] = useState(0);
@@ -54,7 +55,7 @@ const TakStaking = (props) => {
     const [totalRewards, setTotalRewards] = useState(0);
     const [myRewards, setMyRewards] = useState(0);
     const [rewardSum, setRewardSum] = useState(0);
-    const [staked, setStakeState] = useState(false);
+    const [staked, setStakeState] = useState(null);
     
 
     useEffect(() => {
@@ -208,8 +209,7 @@ const TakStaking = (props) => {
             try
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
-                // let amountToApprove = new BigNumber(100000000).multipliedBy(10 ** 18);
-                let amountToApprove = BigNumber.from(100000000).multipliedBy(10 ** 18);
+                let amountToApprove = new BigNumber(100000000 * (10 ** 18));
                 
                
                 console.log('-----', amountToApprove)
@@ -248,8 +248,7 @@ const TakStaking = (props) => {
             try
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
-                // let amountToStake = new BigNumber(amountStake).multipliedBy(10 ** 18)
-                let amountToStake = BigNumber.from(amountStake).multipliedBy(10 ** 18);
+                let amountToStake = new BigNumber(amountStake * (10 ** 18)) 
                 let mint_result = await contract1.methods.stake(amountToStake, lockduration).send({from: account});
 
             }
