@@ -54,13 +54,13 @@ export const CONTRACTS = {
   [CONTRACTS_TYPE.NFTMINT]: {
     1: { address: '0xdfdb171071ee8edd99e1435ce42308c5dc639d95', abi: NFTMint},
     4: { address: "0xdfdb171071ee8edd99e1435ce42308c5dc639d95", abi: NFTMint},
-    56: { address: '0xdfdb171071ee8edd99e1435ce42308c5dc639d95', abi: '' },
+    56: { address: '', abi: '' },
     97: { address: '0xdfdb171071ee8edd99e1435ce42308c5dc639d95', abi: NFTMint},
   },
   [CONTRACTS_TYPE.TAKTOKENSTAKE]: {
     1: { address: '0xd25994ef380086BEEFA892584f5817e8a9601e3F', abi: TakTokenStaking},
     4: { address: "0xd25994ef380086BEEFA892584f5817e8a9601e3F", abi: TakTokenStaking},
-    56: { address: '0xd25994ef380086BEEFA892584f5817e8a9601e3F', abi: '' },
+    56: { address: '', abi: '' },
     97: { address: '0xd25994ef380086BEEFA892584f5817e8a9601e3F', abi: TakTokenStaking},
   },
 

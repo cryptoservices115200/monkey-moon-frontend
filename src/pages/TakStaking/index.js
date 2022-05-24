@@ -129,11 +129,6 @@ const TakStaking = (props) => {
         })();
     }, [chainId, library, account, loading])
 
-
-    // if (account && chainId && library) {
-
-    // }
-
     async function isStaked() {
             if (account && chainId && library) {
                 let contract1 = new web3.eth.Contract(metadata1, addr1);
