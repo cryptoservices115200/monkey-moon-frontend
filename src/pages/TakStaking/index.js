@@ -18,8 +18,8 @@ import { EtherscanProvider } from '@ethersproject/providers';
 import { CONTRACTS, CONTRACTS_TYPE } from '../../utils/constants';
 import { injected } from "../../components/wallet/connectors";
 import axios from "axios";
-// import BigNumber from 'bignumber.js';
-import BigNumber from 'big-number';
+import BigNumber from 'bignumber.js';
+// import BigNumber from 'big-number';
 
 
 
@@ -43,7 +43,7 @@ const TakStaking = (props) => {
     let metadata1 = CONTRACTS[CONTRACTS_TYPE.TAKTOKENSTAKE][4]?.abi;
     let addr1 = CONTRACTS[CONTRACTS_TYPE.TAKTOKENSTAKE][4]?.address;
 
-    const [approveAmount, setAmountValue] = useState(-1);
+    const [approveAmount, setAmountValue] = useState(0);
     const [claimAmount, setClaimAmount] = useState(0);
     const [amountStake, setAmountStake] = useState(0);
     const [lockduration, setLockDuration] = useState(0);
@@ -209,10 +209,16 @@ const TakStaking = (props) => {
             try
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
-                let amountToApprove = new BigNumber(100000000 * (10 ** 18)).toString();;
+                // let amountToApprove = new BigNumber(10000 * (10 ** 18));
+
+                let amountToApprove = new BigNumber(10000).multipliedBy(10 ** 18);
+                // let amountToApprove = 1000000000;
                 
                
-                console.log('-----', amountToApprove)
+                console.log('****************************************************************', amountToApprove);
+
+
+
                 let allow_result = await contract0.methods.approve(addr1, amountToApprove).send({from: account});
 
                 // let allow_result = await contract0.methods.approve(account, amountToApprove).send({from: account});
@@ -249,6 +255,7 @@ const TakStaking = (props) => {
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
                 let amountToStake = new BigNumber(amountStake * (10 ** 18)).toString();
+                console.log('================================================', amountToStake, lockduration)
                 let mint_result = await contract1.methods.stake(amountToStake, lockduration).send({from: account});
 
             }
