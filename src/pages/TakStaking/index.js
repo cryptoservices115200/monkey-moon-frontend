@@ -53,6 +53,8 @@ const TakStaking = (props) => {
     const [totalRewards, setTotalRewards] = useState(0);
     const [myRewards, setMyRewards] = useState(0);
     const [rewardSum, setRewardSum] = useState(0);
+    const [staked, setStakeState] = useState(false);
+    
 
     useEffect(() => {
         (async () => {
@@ -115,6 +117,8 @@ const TakStaking = (props) => {
                     temp_val = await contract1.methods.stakeStructs(account).call();
                     console.log("MYstakeStructs: ", temp_val);
                     // setMyRewards(Math.floor(temp_val));
+                    let stakeState = await isStaked();
+                    setStakeState(stakeState);
                     
                 }
                 catch(err)
@@ -415,7 +419,7 @@ const TakStaking = (props) => {
                                 {account && (approveAmount > 0) && (
                                     <div className="button-group">
                                         {
-                                            !isStaked() ?
+                                            staked == false ?
                                                 (<div className="button" onClick={clickStake}>STAKE</div>)
                                             :
                                                 (
