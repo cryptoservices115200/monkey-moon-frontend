@@ -209,7 +209,7 @@ const TakStaking = (props) => {
             try
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
-                let amountToApprove = new BigNumber(100000000 * (10 ** 18));
+                let amountToApprove = new BigNumber(100000000 * (10 ** 18)).toString();;
                 
                
                 console.log('-----', amountToApprove)
@@ -248,7 +248,7 @@ const TakStaking = (props) => {
             try
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
-                let amountToStake = new BigNumber(amountStake * (10 ** 18)) 
+                let amountToStake = new BigNumber(amountStake * (10 ** 18)).toString();
                 let mint_result = await contract1.methods.stake(amountToStake, lockduration).send({from: account});
 
             }
