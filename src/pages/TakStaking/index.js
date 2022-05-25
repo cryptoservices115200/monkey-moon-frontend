@@ -119,7 +119,7 @@ const TakStaking = (props) => {
                     temp_val = await contract1.methods.stakeStructs(account).call();
                     console.log("MYstakeStructs: ", temp_val);
                     // setMyRewards(Math.floor(temp_val));
-                    let stakeState = await isStaked();
+                    let stakeState = await contract1.methods.isStaked(account).call();
                     setStakeState(stakeState);
                     
                 }

@@ -40,10 +40,10 @@ export const CONTRACTS = {
 
   
   // [CONTRACTS_TYPE.TAKTOKEN]: {
-  //   1: { address: '0x4ae947b44AD412C16b381Bf78e809df7E48924eb', abi: TakToken},
-  //   4: { address: "0x4ae947b44AD412C16b381Bf78e809df7E48924eb", abi: TakToken},
+  //   1: { address: '0xF25C6a0ce6174d89133c55d9908b0e10571861b8', abi: TakToken},
+  //   4: { address: "0xF25C6a0ce6174d89133c55d9908b0e10571861b8", abi: TakToken},
   //   56: { address: '', abi: '' },
-  //   97: { address: '0x4ae947b44AD412C16b381Bf78e809df7E48924eb', abi: TakToken},
+  //   97: { address: '0xF25C6a0ce6174d89133c55d9908b0e10571861b8', abi: TakToken},
   // },
   // [CONTRACTS_TYPE.NFTSTAKING]: {
   //   1: { address: '0x2D9A3804Bf88666B67424D301F0C5c815dc5438f', abi: NFTStaking},
@@ -58,10 +58,10 @@ export const CONTRACTS = {
   //   97: { address: '0xdfdb171071ee8edd99e1435ce42308c5dc639d95', abi: NFTMint},
   // },
   // [CONTRACTS_TYPE.TAKTOKENSTAKE]: {
-  //   1: { address: '0xd25994ef380086BEEFA892584f5817e8a9601e3F', abi: TakTokenStaking},
-  //   4: { address: "0xd25994ef380086BEEFA892584f5817e8a9601e3F", abi: TakTokenStaking},
+  //   1: { address: '0xe9BaD25433500e02846eFCc5C30be20BFc401D96', abi: TakTokenStaking},
+  //   4: { address: "0xe9BaD25433500e02846eFCc5C30be20BFc401D96", abi: TakTokenStaking},
   //   56: { address: '', abi: '' },
-  //   97: { address: '0xd25994ef380086BEEFA892584f5817e8a9601e3F', abi: TakTokenStaking},
+  //   97: { address: '0xe9BaD25433500e02846eFCc5C30be20BFc401D96', abi: TakTokenStaking},
   // },
 
 
