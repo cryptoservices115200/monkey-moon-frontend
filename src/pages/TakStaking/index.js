@@ -19,7 +19,9 @@ import { CONTRACTS, CONTRACTS_TYPE } from '../../utils/constants';
 import { injected } from "../../components/wallet/connectors";
 import axios from "axios";
 // import BigNumber from 'bignumber.js';
-import BigNumber from 'big-number';
+// import BigNumber from 'big-number';
+import { BigNumber } from "@ethersproject/bignumber";
+import { ethers } from 'ethers';
 
 
 
@@ -211,8 +213,8 @@ const TakStaking = (props) => {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
                 // let amountToApprove = new BigNumber(10000 * (10 ** 18));
 
-                let amountToApprove = new BigNumber(10000).multipliedBy(10 ** 18).toString();
-                // let amountToApprove = 1000000000;
+                let amountToApprove = BigNumber.from(10000 + "000000000000000000");
+                // let amountToApprove = BigNumber.from('1000000000000000000000000');
                 
                
                 console.log('****************************************************************', typeof amountToApprove, amountToApprove);
@@ -254,7 +256,9 @@ const TakStaking = (props) => {
             try
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
-                let amountToStake = new BigNumber(amountStake * (10 ** 18)).toString();
+                // let amountToStake = new BigNumber(amountStake * (10 ** 18)).toString();
+                let amountToStake = BigNumber.from(amountStake + "000000000000000000");
+                
                 console.log('================================================', amountToStake, lockduration)
                 let mint_result = await contract1.methods.stake(amountToStake, lockduration).send({from: account});
 
@@ -443,9 +447,6 @@ const TakStaking = (props) => {
                                     <div className="button" onClick={clickClaim}>CLAIM</div>
                                 </div> */}
 
-<div className="button-group">
-                                        <div className="button" onClick={approve}>approve</div>
-                                    </div>
 
                                 {account && (approveAmount == 0) && (
                                     <div className="button-group">
