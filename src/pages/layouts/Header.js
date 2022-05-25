@@ -63,19 +63,31 @@ const Header = (props) => {
         })();
     }, [chainId, library, account])
 
-    function connect() {
-        activate(injected, async (error) => {
-            console.log(error);
-        });
+    useEffect(() => {
+        if (!active && localStorage.getItem("accountStatus")) {
+            activate(injected);
+        }
+    }, [])
+
+    async function connect() {
+        // activate(injected, async (error) => {
+        //     console.log(error);
+        //     localStorage.setItem("accountStatus", "1");
+        // });
+        await activate(injected);
+        localStorage.setItem("accountStatus", "1");
     }
 
     async function disconnect() {
         try {
             deactivate();
+            localStorage.removeItem("accountStatus")
         } catch (ex) {
             console.log(ex)
         }
     }
+
+
 
     return (
         <>

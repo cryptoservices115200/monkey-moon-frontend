@@ -58,6 +58,12 @@ const TakStaking = (props) => {
     const [myRewards, setMyRewards] = useState(0);
     const [rewardSum, setRewardSum] = useState(0);
     const [staked, setStakeState] = useState(null);
+
+    // useEffect(() => {
+    //     if (!active && localStorage.getItem("accountStatus")) {
+    //         activate(injected);
+    //     }
+    // }, [])
     
 
     useEffect(() => {
@@ -95,10 +101,10 @@ const TakStaking = (props) => {
 
                 try
                 {
-                    let staked = await contract1.methods.getAmountClaimable().call();
-                    console.log(staked);
+                    let amount_claimable = await contract1.methods.getAmountClaimable().call();
+                    console.log(amount_claimable);
                     console.log('staked.amount');
-                    setAmount(staked);
+                    setAmount(amount_claimable);
 
                     let allow_result = await contract0.methods.allowance(account, addr1).call();
                     setAmountValue(allow_result);
@@ -107,10 +113,10 @@ const TakStaking = (props) => {
                     let balance = await contract0.methods.balanceOf(account).call();
                     setMyBalance(balance / (10 ** 18));
 
-                    let temp_val = await contract1.methods.lastRewardsPool().call();
+                    let temp_val = await contract1.methods.totalRewardsClaimed(account).call();
                     // totalRewards_tmp = new BigNumber(totalRewards_tmp).dividedBy(10 ** 18);
                     temp_val = temp_val / (10 ** 18);
-                    console.log("lastRewardsPool: ", temp_val)
+                    console.log("lastRewardsPool::::::::::::: ", temp_val)
                     setTotalRewards(Math.floor(temp_val));
 
                     temp_val = await contract1.methods.userToRewards(account).call();
@@ -266,7 +272,7 @@ const TakStaking = (props) => {
             catch(err)
             {
                 console.log(err);
-                alert("User can stake only once per time. To do another stake, please finish previous stake.");
+                console.log("User can stake only once per time. To do another stake, please finish previous stake.");
             }
             setLoading(false);
         }
@@ -289,7 +295,7 @@ const TakStaking = (props) => {
             catch(err)
             {
                 console.log(err);
-                alert("Contract does not have enough TAKs for unstake and reward");
+                console.log("Contract does not have enough TAKs for unstake and reward");
             }
             setLoading(false);
         }
@@ -312,7 +318,7 @@ const TakStaking = (props) => {
             catch(err)
             {
                 console.log(err);
-                alert("Contract does not have enough TAKs");
+                console.log("Contract does not have enough TAKs");
             }
             setLoading(false);
         }
