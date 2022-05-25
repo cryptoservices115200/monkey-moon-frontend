@@ -447,6 +447,9 @@ const TakStaking = (props) => {
                                     <div className="button" onClick={clickClaim}>CLAIM</div>
                                 </div> */}
 
+<div className="button-group">
+                                        <div className="button" onClick={approve}>approve</div>
+                                    </div>
 
                                 {account && (approveAmount == 0) && (
                                     <div className="button-group">
