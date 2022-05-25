@@ -18,8 +18,8 @@ import { EtherscanProvider } from '@ethersproject/providers';
 import { CONTRACTS, CONTRACTS_TYPE } from '../../utils/constants';
 import { injected } from "../../components/wallet/connectors";
 import axios from "axios";
-import BigNumber from 'bignumber.js';
-// import BigNumber from 'big-number';
+// import BigNumber from 'bignumber.js';
+import BigNumber from 'big-number';
 
 
 
@@ -211,11 +211,11 @@ const TakStaking = (props) => {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
                 // let amountToApprove = new BigNumber(10000 * (10 ** 18));
 
-                let amountToApprove = new BigNumber(10000).multipliedBy(10 ** 18);
+                let amountToApprove = new BigNumber(10000).multipliedBy(10 ** 18).toString();
                 // let amountToApprove = 1000000000;
                 
                
-                console.log('****************************************************************', amountToApprove);
+                console.log('****************************************************************', typeof amountToApprove, amountToApprove);
 
 
 
