@@ -277,6 +277,8 @@ const MonkeyEarning = (props) => {
         }
     }
 
+    console.log('===========================', myNFTData);
+
     if(loading)
     {  
         return (
@@ -321,6 +323,8 @@ const MonkeyEarning = (props) => {
                             <div className='gradient-btn staking-container-top-collection-btn' onClick={() => stakeAction(data.name)}>STAKE</div>
                         </div>
                     ))}
+
+                    
                 </div>
                 <div className='staking-container-top nft_container'>
                     {myStakedNFTData.map((data, index) => (
@@ -334,6 +338,14 @@ const MonkeyEarning = (props) => {
                             <div className='gradient-btn staking-container-top-collection-btn' onClick={() => unStakeAll()}>UNSTAKE</div>
                         </div>
                     ))}
+
+                    {(myNFTData.length == 0 && myStakedNFTData.length == 0 &&)
+                          (<div
+                          className="staking-container-top-collection"
+                      >
+                            No NFTs found
+                      </div>)
+                    }
                 </div>
                 <div className='staking-container-bottom'>
                     {/* <div className='staking-container-bottom-item'>
