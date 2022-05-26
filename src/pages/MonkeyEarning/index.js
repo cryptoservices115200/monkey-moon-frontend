@@ -121,6 +121,7 @@ const MonkeyEarning = (props) => {
     const [unstakedcount, setUnstakedcount] = useState(0);
     const [stakedcount, setStakedcount] = useState(0);
     const [nextClaimable, setNextClaimable] = useState(0);
+    const [isBusy, setBusy] = useState(false);
 
     let base_uri = "https://ipfs.io/ipfs/QmT7a4eC1VnwPLK7wzF8jFZU5jDpuPi9KqQ8Kq386tpere/";
 
@@ -130,6 +131,7 @@ const MonkeyEarning = (props) => {
 
 
             if (account && chainId && library) {
+                setBusy(true);
                 web3 = new Web3(library.provider);
 
                 let NFT_Mint_Contract = new web3.eth.Contract(metadata1, addr1);
@@ -185,6 +187,7 @@ const MonkeyEarning = (props) => {
                 {
                     console.log(err);
                 }
+                setBusy(false);
             }
         })();
     }, [chainId, library, account, loading])
@@ -339,23 +342,24 @@ const MonkeyEarning = (props) => {
                         </div>
                     ))}
 
-                    {(myNFTData.length == 0 && myStakedNFTData.length == 0) &&
+                    {(!isBusy && myNFTData.length == 0 && myStakedNFTData.length == 0) &&
                           (<div
                           className="staking-container-top-collection"
                       >
-                            No NFTs found
+                            no NFTs found
                       </div>)
                     }
+
+                    {isBusy && (
+                        <div
+                            className="staking-container-top-collection"
+                        >
+                                Loading...
+                                <Hearts color="#F001F4" height={100} width={100}/>
+                        </div>
+                      )} 
                 </div>
                 <div className='staking-container-bottom'>
-                    {/* <div className='staking-container-bottom-item'>
-                        <div className='pink-font'>AVG PAYOUT</div>
-                        <div className=''>209</div>
-                    </div>
-                    <div className='staking-container-bottom-item'>
-                        <div className='pink-font'>AVG PAYOUT</div>
-                        <div className=''>871</div>
-                    </div> */}
                     <div className='staking-container-bottom-item'>
                         <div className='pink-font'>UNSTAKED</div>
                         <div className=''>{stakedcount}</div>
