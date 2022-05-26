@@ -357,7 +357,8 @@ const TakStaking = (props) => {
                         <div className="staking-container-left">
                             <div className="staking-container-left-top">
                                 <div className="title">
-                                    Available Staked TAK Balance {Math.floor(myBalance)}
+                                    User Wallet Balance {Math.floor(myBalance)}   
+                                     {/* Available Staked TAK Balance */}
                                     <div style={{float:'right'}}>{amount}</div>
                                 </div>
                                 <div className="stake-component ph-hide wnd-show">
