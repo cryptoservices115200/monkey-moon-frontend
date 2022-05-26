@@ -50,6 +50,7 @@ const TakStaking = (props) => {
     const [amountStake, setAmountStake] = useState(0);
     const [lockduration, setLockDuration] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [refresh, setRefresh] = useState(0);
     const [myBalance, setMyBalance] = useState(0);
     const [chartdata, setChartData] = useState([]);
 
@@ -68,6 +69,7 @@ const TakStaking = (props) => {
 
     useEffect(() => {
         (async () => {
+            setLoading(true);
             if (account && chainId && library) {
                 web3 = new Web3(library.provider);
                 let contract0 = new web3.eth.Contract(metadata0, addr0);
@@ -119,17 +121,15 @@ const TakStaking = (props) => {
                     console.log("lastRewardsPool::::::::::::: ", temp_val)
                     setTotalRewards(Math.floor(temp_val));
 
-                    temp_val = await contract1.methods.userToRewards(account).call();
-                    temp_val = temp_val / (10 ** 18);
-                    console.log("MyRewardsPool: ", temp_val);
-                    setMyStakedAmount(Math.floor(temp_val));
-
-                    let temp_obj = await contract0.methods.balanceOf(addr1).call();
-                    let aaaaaa = temp_obj / (10 ** 18);
-                    console.log("MYstakeStructs: ", aaaaaa);
-                    setMyStakedAmount(Math.floor(aaaaaa));
                     let stakeState = await contract1.methods.isStaked(account).call();
                     setStakeState(stakeState);
+
+                    let temp_obj = await contract1.methods.stakeStructs(account).call();
+                    let stakeFlag = temp_obj.amount / (10 ** 18);
+                    if(stakeState == false) stakeFlag = 0
+
+                    console.log("MYstakeStructs: ", stakeFlag);
+                    setMyStakedAmount(Math.floor(stakeFlag));
                     
                 }
                 catch(err)
@@ -137,8 +137,9 @@ const TakStaking = (props) => {
                     console.log(err);
                 }
             }
+            setLoading(false);
         })();
-    }, [chainId, library, account, loading])
+    }, [chainId, library, account, refresh])
 
     async function isStaked() {
             if (account && chainId && library) {
@@ -197,6 +198,7 @@ const TakStaking = (props) => {
         activate(injected, async (error) => {
             console.log(error);
         });
+        setRefresh(1-refresh);
         setLoading(false);
     }
 
@@ -242,6 +244,7 @@ const TakStaking = (props) => {
             {
                 console.log(err);
             }
+            setRefresh(1-refresh);
             setLoading(false);
         }
     }
@@ -275,6 +278,7 @@ const TakStaking = (props) => {
                 console.log(err);
                 console.log("User can stake only once per time. To do another stake, please finish previous stake.");
             }
+            setRefresh(1-refresh);
             setLoading(false);
         }
     }
@@ -299,6 +303,7 @@ const TakStaking = (props) => {
                 console.log(err);
                 console.log("Contract does not have enough TAKs for unstake and reward");
             }
+            setRefresh(1-refresh);
             setLoading(false);
         }
     }
@@ -322,6 +327,7 @@ const TakStaking = (props) => {
                 console.log(err);
                 console.log("Contract does not have enough TAKs");
             }
+            setRefresh(1-refresh);
             setLoading(false);
         }
     }
