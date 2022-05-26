@@ -203,6 +203,19 @@
     },
     {
         "inputs": [],
+        "name": "lastProcessedTimestamp",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "lastRewardsPool",
         "outputs": [
             {
@@ -238,6 +251,19 @@
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "processOutStandingDays",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -397,13 +423,6 @@
             }
         ],
         "name": "transferOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "triggerProcessOutStandingDays",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
