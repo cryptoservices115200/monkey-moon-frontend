@@ -55,7 +55,7 @@ const TakStaking = (props) => {
 
     const [amount, setAmount] = useState(0);
     const [totalRewards, setTotalRewards] = useState(0);
-    const [myRewards, setMyRewards] = useState(0);
+    const [myStakedAmount, setMyStakedAmount] = useState(0);
     const [rewardSum, setRewardSum] = useState(0);
     const [staked, setStakeState] = useState(null);
 
@@ -122,11 +122,12 @@ const TakStaking = (props) => {
                     temp_val = await contract1.methods.userToRewards(account).call();
                     temp_val = temp_val / (10 ** 18);
                     console.log("MyRewardsPool: ", temp_val);
-                    setMyRewards(Math.floor(temp_val));
+                    setMyStakedAmount(Math.floor(temp_val));
 
-                    temp_val = await contract1.methods.stakeStructs(account).call();
-                    console.log("MYstakeStructs: ", temp_val);
-                    // setMyRewards(Math.floor(temp_val));
+                    let temp_obj = await contract1.methods.stakeStructs(account).call();
+                    let aaaaaa = temp_obj.amount / (10 ** 18);
+                    console.log("MYstakeStructs: ", aaaaaa);
+                    setMyStakedAmount(Math.floor(aaaaaa));
                     let stakeState = await contract1.methods.isStaked(account).call();
                     setStakeState(stakeState);
                     
@@ -490,7 +491,7 @@ const TakStaking = (props) => {
                                         <div className="title">My Data</div>
                                         <div className="detail">
                                             <div className="sub-title">My TAK Staked</div>
-                                            <div className="info">{myRewards} TAK</div>
+                                            <div className="info">{myStakedAmount} TAK</div>
                                         </div>
                                         <div className="detail">
                                             <div className="sub-title">My TAK Earned</div>
