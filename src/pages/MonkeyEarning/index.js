@@ -180,8 +180,8 @@ const MonkeyEarning = (props) => {
                     setMyStakedNFTData(temp_array);
 
                     let claimable = await NFT_Staking_Contract.methods.stakers(account).call();
-                    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~', claimable.balance);
-                    setNextClaimable(claimable.balance);
+                    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~', claimable.balance/(10 ** 18));
+                    setNextClaimable(claimable.balance/(10 ** 18));
                 }
                 catch(err)
                 {
