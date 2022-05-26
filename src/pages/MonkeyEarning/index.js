@@ -120,6 +120,7 @@ const MonkeyEarning = (props) => {
     const [stakedTokeIdList, setStakedTokenIdList] = useState([]);
     const [unstakedcount, setUnstakedcount] = useState(0);
     const [stakedcount, setStakedcount] = useState(0);
+    const [nextClaimable, setNextClaimable] = useState(0);
 
     let base_uri = "https://ipfs.io/ipfs/QmT7a4eC1VnwPLK7wzF8jFZU5jDpuPi9KqQ8Kq386tpere/";
 
@@ -135,16 +136,13 @@ const MonkeyEarning = (props) => {
                 let NFT_Staking_Contract = new web3.eth.Contract(metadata2, addr2);
                 try
                 {
-
                     const approve_result = await NFT_Mint_Contract.methods.isApprovedForAll(account, addr2).call();
-                    console.log(approve_result);
                     setAllApprove(approve_result)
                     if(!approve_result)
                     {
                         const setAppr = await NFT_Mint_Contract.methods.setApprovalForAll(addr2, true).send({from: account});
                         console.log("SUCCESS Approved !!!");
                     }
-                    
 
                     let temp_array = [];
                     let allow_result = await NFT_Staking_Contract.methods.getNFTsByOwner(account, 0).call();   //0x16836190dd89aa4aea5f036e3270cb09f8e84790
@@ -179,6 +177,9 @@ const MonkeyEarning = (props) => {
                     setUnstakedcount(allow_result.length);
                     setMyStakedNFTData(temp_array);
 
+                    let claimable = await NFT_Staking_Contract.methods.stakers(account).call();
+                    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~', claimable.balance);
+                    setNextClaimable(claimable.balance);
                 }
                 catch(err)
                 {
@@ -277,7 +278,6 @@ const MonkeyEarning = (props) => {
         }
     }
 
-    console.log('===========================', myNFTData);
 
     if(loading)
     {  
@@ -339,7 +339,7 @@ const MonkeyEarning = (props) => {
                         </div>
                     ))}
 
-                    {(myNFTData.length == 0 && myStakedNFTData.length == 0 &&)
+                    {(myNFTData.length == 0 && myStakedNFTData.length == 0) &&
                           (<div
                           className="staking-container-top-collection"
                       >
@@ -377,9 +377,9 @@ const MonkeyEarning = (props) => {
                         <div className='assets-container-body-part-item'>
                             <div className='left'>
                                 <div className='pink-font'>Mooning Monkey</div>
-                                <div className='text-sm'>Owned: 7</div>
+                                <div className='text-sm'>Owned: {myNFTData.length + myStakedNFTData.length}</div>
                                 <div className='text-sm'>Next Claimable</div>
-                                <div className='text-sm'>Amount: 1349 TAK</div>
+                                <div className='text-sm'>Amount: {nextClaimable}</div>
                             </div>
                             <div className='right'></div>
                         </div>
