@@ -291,6 +291,7 @@ const TakStaking = (props) => {
             {
                 // let approve = await contract1.methods.approvedAddresses(account).call();
                 let mint_result = await contract1.methods.unstake().send({from: account});
+                setMyStakedAmount(0);
 
             }
             catch(err)
