@@ -124,8 +124,8 @@ const TakStaking = (props) => {
                     console.log("MyRewardsPool: ", temp_val);
                     setMyStakedAmount(Math.floor(temp_val));
 
-                    let temp_obj = await contract1.methods.stakeStructs(account).call();
-                    let aaaaaa = temp_obj.amount / (10 ** 18);
+                    let temp_obj = await contract0.methods.balanceOf(addr1).call();
+                    let aaaaaa = temp_obj / (10 ** 18);
                     console.log("MYstakeStructs: ", aaaaaa);
                     setMyStakedAmount(Math.floor(aaaaaa));
                     let stakeState = await contract1.methods.isStaked(account).call();
